@@ -69,18 +69,34 @@ public class Manager extends Application
 			DataPlot.Plot(i, i, this);//create dataplot for GUI
 		}
   
-		String=ImagePull();
+//		try 
+//		{
+//			imageLocation=ImagePull();
+//			Image=new Image(imageLocation);
+//			System.out.println(imageLocation);
+//			ImageView=new ImageView(Image);
+//		}
+//		catch (IOException IOE)
+//		{
+//			System.out.println("Something is wrong with the file I/O!");
+//			IOE.printStackTrace();
+//		}
+//		catch (Exception e)
+//		{
+//			System.out.println("Something is wrong and I don`t know what!");
+//			e.printStackTrace();
+//		}
 
 		BorderPane.setLeft(DataPlot);
 		BorderPane.setTop(txtSpots);//place text area in top pane
-		BorderPane.setCenter(ImageView);//place image in center pane
+		BorderPane.setCenter(ImageView2);//place image in center pane
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
 	}//end of method start
 
-	public static String ImagePull(String[] args) throws Exception
+	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
 		boolean check;//file existence variable
