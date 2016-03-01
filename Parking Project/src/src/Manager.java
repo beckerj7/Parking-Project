@@ -69,7 +69,7 @@ public class Manager extends Application
 			DataPlot.Plot(i, i, this);//create dataplot for GUI
 		}
   
-//		String=ImagePull();
+		String=ImagePull();
 
 		BorderPane.setLeft(DataPlot);
 		BorderPane.setTop(txtSpots);//place text area in top pane
