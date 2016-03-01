@@ -23,15 +23,13 @@ public class Manager extends Application
 	Pane Pane;
 	Scene Scene;
 
-	ImagePull ImagePull=new ImagePull();
-
-	String String;
+	String imageLocation;
 
 	Text txtSpots;
 
 	DataPlot DataPlot=new DataPlot("Time", "Spots");
 
-	Image Image=new Image("image1.jpg");
+	Image Image;
 	Image Image2=new Image("image2.jpg");
 	ImageView ImageView=new ImageView(Image);
 	ImageView ImageView2=new ImageView(Image2);
@@ -64,32 +62,29 @@ public class Manager extends Application
 
 		taDisplay.setText("Number of parking spots available: N/A");//set text to be displayed
 
-		for (i=0; i<10; i++)
+		for (i=0; i<10; i++) DataPlot.Plot(i, i, this);//create test dataplot for GUI
+
+		try 
 		{
-			DataPlot.Plot(i, i, this);//create dataplot for GUI
+			imageLocation=ImagePull();
 		}
-  
-//		try 
-//		{
-//			imageLocation=ImagePull();
-//			Image=new Image(imageLocation);
-//			System.out.println(imageLocation);
-//			ImageView=new ImageView(Image);
-//		}
-//		catch (IOException IOE)
-//		{
-//			System.out.println("Something is wrong with the file I/O!");
-//			IOE.printStackTrace();
-//		}
-//		catch (Exception e)
-//		{
-//			System.out.println("Something is wrong and I don`t know what!");
-//			e.printStackTrace();
-//		}
+		catch (IOException IOE)
+		{
+			System.out.println("Something is wrong with the file I/O!");
+			IOE.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Something is wrong with the image pull and I don`t know what!");
+			e.printStackTrace();
+		}
+		
+		ImageView=new ImageView(new Image(imageLocation));
+//		ImageView=new ImageView(new Image("image3.jpg"));
 
 		BorderPane.setLeft(DataPlot);
 		BorderPane.setTop(txtSpots);//place text area in top pane
-		BorderPane.setCenter(ImageView2);//place image in center pane
+		BorderPane.setCenter(ImageView);//place image in center pane
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
@@ -101,18 +96,15 @@ public class Manager extends Application
 		int i=0;//counter variable
 		boolean check;//file existence variable
 
-
 		String imageUrl="http://construction1.db.erau.edu/jpg/1/image.jpg";
-
-		i=0;
 
 		do//avoid overwriting existing images
 		{
 			i++;
-			check=new File("image" + i + ".jpg").exists();
+			check=new File("src\\image" + i + ".jpg").exists();
 		}while (check==true);
 
-		String destinationFile="image" + i + ".jpg";//set image destination
+		String destinationFile="src\\image" + i + ".jpg";//set image destination
 
 		try {saveImage(imageUrl, destinationFile);}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
@@ -121,6 +113,8 @@ public class Manager extends Application
 			e1.printStackTrace();
 		}
 
+		destinationFile="image" + (i-49) + ".jpg";
+		System.out.println(destinationFile);
 		return destinationFile;//return image location
 	}
 
