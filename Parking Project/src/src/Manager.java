@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -51,7 +50,9 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
-		int g=1;
+		int g=0;
+		int i;
+		DataPlot[] Plots=new DataPlot[7];
 		
 		//GUI assembly
 		BorderPane=new BorderPane();
@@ -72,7 +73,11 @@ public class Manager extends Application
 
 		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
-		DataPlot.Plot(24, this);//create test dataplot for GUI
+		for (i=0; i<7; i++)
+			{
+			DataPlot.Plot(g, this);//create test dataplot for GUI	
+			}
+		
 		HBoxBt.getChildren().addAll(btLeft, btRight);
 		VBoxGraph.getChildren().addAll(HBoxBt, DataPlot);
 
@@ -95,9 +100,9 @@ public class Manager extends Application
 //		ImageView=new ImageView(new Image(imageLocation));
 
 		
-		BorderPane.setLeft(VBoxGraph);//place graph in bottom pane
+		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
 		BorderPane.setCenter(ImageView);//place image in center pane
-		BorderPane.setTop(taDisplay);//place text area in left pane
+		BorderPane.setLeft(taDisplay);//place text area in left pane
 
 
 		Scene=new Scene(BorderPane);//lights!
