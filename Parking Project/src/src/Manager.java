@@ -40,7 +40,7 @@ public class Manager extends Application
 	Image Image;
 	ImageView ImageView=new ImageView(Image);
 
-	TextArea taDescription;
+	TextArea taReport;
 	TextArea taDisplay;
 
 	public static void main(String args[])
@@ -53,15 +53,17 @@ public class Manager extends Application
 	public void start(Stage Stage)
 	{
 		int g=0;
+		int i;
 		DataPlot[] Plots=new DataPlot[7];
+		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots");
 
 		//GUI assembly
 		BorderPane=new BorderPane();
 
 		Pane=new Pane();
 
-		Button btLeft=new Button("Left");
-		Button btRight=new Button("Right");
+		Button btLeft=new Button("<--");
+		Button btRight=new Button("-->");
 
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
@@ -69,14 +71,19 @@ public class Manager extends Application
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
 
+		taReport=new TextArea();
+		taReport.setEditable(false);
+
 		ImageView.setFitWidth(800);//imageView formatting
 		ImageView.setPreserveRatio(true);
 
 		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
 		DataPlot.Plot(24, this);//create test dataplot for GUI
+		for (i=0; i<7; i++) Plots[i].Plot(i*4, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
-		VBoxGraph.getChildren().addAll(HBoxBt, DataPlot);
+
+		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
 
 		try 
 		{
@@ -94,47 +101,65 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e1) {
-			System.out.println("Did not sleep");
-			e1.printStackTrace();
-
-			try
-			{
-				ImageView=new ImageView(new Image(imageLocation));
-			}
-			catch (Exception E)
-			{
-				E.printStackTrace();
-			}
+		try
+		{
+			ImageView=new ImageView(new Image(imageLocation));
+			BorderPane.setCenter(ImageView);//place image in center pane
+		}
+		catch (Exception E)
+		{
+			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
+			BorderPane.setCenter(taReport);//place image in center pane
 		}
 
+
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
-		BorderPane.setCenter(ImageView);//place image in center pane
 		BorderPane.setLeft(taDisplay);//place text area in left pane
 
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
-
-		btLeft.setOnAction(e->Left(g, this));
-		btRight.setOnAction(e->Right(g, this));
+		
+		btLeft.setOnAction(e->Left(g, Plots));
+		btRight.setOnAction(e->Right(g, Plots));
 	}//end of method start
 
 
-	public int Left(int g, Manager Manager)
+	public int Left(int g, DataPlot Plots[])
 	{
 		g--;
-
+		if (g<0) g=6;
+		try{
+			VBoxGraph.getChildren().clear();
+			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
+			taDisplay.appendText("\nDisplaying plot " + g);
+		}
+		catch (Exception E)
+		{
+			System.out.println("Couldn`t add to VBox");
+			E.printStackTrace();
+		}
+		System.out.println("Left complete");
 		return g;
 	}
 
-	public int Right(int g, Manager Manager)
+	public int Right(int g, DataPlot Plots[])
 	{
 		g++;
+		if (g>6) g=0;
+		try{
+			VBoxGraph.getChildren().clear();
+			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
+			taDisplay.appendText("\nDisplaying plot " + g);
+		}
+		catch (Exception E)
+		{
+			System.out.println("Couldn`t add to VBox");
+			E.printStackTrace();
+		}
 
+		System.out.println("Right complete");
 		return g;
 	}
 
