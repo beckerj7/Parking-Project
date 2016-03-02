@@ -22,7 +22,7 @@ public class DataPlot extends LineChart<Number,Number>
 		setTitle(getYAxis().getLabel() + " vs " + getXAxis().getLabel());//set the title
 		XYChart.Series<Number, Number> series=new XYChart.Series<Number, Number>();//create new plot
 
-		try {for (i=0; i<c; i++) series.getData().add(new XYChart.Data<Number, Number>(i, i));}//plot the datapoint
+		try {for (i=0; i<c; i++) series.getData().add(new XYChart.Data<Number, Number>(i, i+c));}//plot the datapoint
 		catch (Exception e) {Manager.taDisplay.appendText("Something went wrong with the dataplot!");}
 
 		getData().add(series);
