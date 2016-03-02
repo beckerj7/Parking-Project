@@ -6,6 +6,10 @@ import javafx.scene.chart.XYChart;
 
 public class DataPlot extends LineChart<Number,Number>
 {
+	/**
+	 * @param PlotX
+	 * @param PlotY
+	 */
 	public DataPlot(String PlotX, String PlotY)
 	{
 		super(new NumberAxis(), new NumberAxis());

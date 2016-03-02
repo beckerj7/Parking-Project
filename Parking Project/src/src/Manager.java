@@ -1,12 +1,11 @@
 package src;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URL;import src.display;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -26,10 +25,10 @@ public class Manager extends Application
 	BorderPane BorderPane;//create GUI elements
 	Pane Pane;
 	Scene Scene;
-
+	
 	HBox HBoxBt;
 	VBox VBoxGraph;
-
+	
 	int spots = display.spotsAvailable;
 	String imageLocation;
 
@@ -40,7 +39,7 @@ public class Manager extends Application
 	Image Image;
 	ImageView ImageView=new ImageView(Image);
 
-	TextArea taReport;
+	TextArea taDescription;
 	TextArea taDisplay;
 
 	public static void main(String args[])
@@ -55,35 +54,33 @@ public class Manager extends Application
 		int g=0;
 		int i;
 		DataPlot[] Plots=new DataPlot[7];
-		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots");
-
+		
 		//GUI assembly
 		BorderPane=new BorderPane();
 
 		Pane=new Pane();
 
-		Button btLeft=new Button("<--");
-		Button btRight=new Button("-->");
-
+		Button btLeft=new Button("Left");
+		Button btRight=new Button("Right");
+		
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
-
+		
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
-
-		taReport=new TextArea();
-		taReport.setEditable(false);
 
 		ImageView.setFitWidth(800);//imageView formatting
 		ImageView.setPreserveRatio(true);
 
 		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
-		DataPlot.Plot(24, this);//create test dataplot for GUI
-		for (i=0; i<7; i++) Plots[i].Plot(i*4, this);//create test dataplot for GUI
+		for (i=0; i<7; i++)
+			{
+			DataPlot.Plot(g, this);//create test dataplot for GUI	
+			}
+		
 		HBoxBt.getChildren().addAll(btLeft, btRight);
-
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
+		VBoxGraph.getChildren().addAll(HBoxBt, DataPlot);
 
 		try 
 		{
@@ -100,20 +97,13 @@ public class Manager extends Application
 			System.out.println("Something is wrong with the image pull and I don`t know what!");
 			e.printStackTrace();
 		}
+		
+		//ImageView=new ImageView(new Image(imageLocation));
+//		ImageView=new ImageView(new Image(imageLocation));
 
-		try
-		{
-			ImageView=new ImageView(new Image(imageLocation));
-			BorderPane.setCenter(ImageView);//place image in center pane
-		}
-		catch (Exception E)
-		{
-			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
-			BorderPane.setCenter(taReport);//place image in center pane
-		}
-
-
+		
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
+		BorderPane.setCenter(ImageView);//place image in center pane
 		BorderPane.setLeft(taDisplay);//place text area in left pane
 
 
@@ -121,48 +111,25 @@ public class Manager extends Application
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
 		
-		btLeft.setOnAction(e->Left(g, Plots));
-		btRight.setOnAction(e->Right(g, Plots));
+		btLeft.setOnAction(e->Left(g, this));
+		btRight.setOnAction(e->Right(g, this));
 	}//end of method start
 
-
-	public int Left(int g, DataPlot Plots[])
+	
+	public int Left(int g, Manager Manager)
 	{
 		g--;
-		if (g<0) g=6;
-		try{
-			VBoxGraph.getChildren().clear();
-			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-			taDisplay.appendText("\nDisplaying plot " + g);
-		}
-		catch (Exception E)
-		{
-			System.out.println("Couldn`t add to VBox");
-			E.printStackTrace();
-		}
-		System.out.println("Left complete");
+		
 		return g;
 	}
-
-	public int Right(int g, DataPlot Plots[])
+	
+	public int Right(int g, Manager Manager)
 	{
 		g++;
-		if (g>6) g=0;
-		try{
-			VBoxGraph.getChildren().clear();
-			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-			taDisplay.appendText("\nDisplaying plot " + g);
-		}
-		catch (Exception E)
-		{
-			System.out.println("Couldn`t add to VBox");
-			E.printStackTrace();
-		}
-
-		System.out.println("Right complete");
+		
 		return g;
 	}
-
+	
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
@@ -177,7 +144,7 @@ public class Manager extends Application
 		}while (check==true);
 
 		String destinationFile="image" + i + ".jpg";//set image destination
-
+		
 		try {saveImage(imageUrl, destinationFile);}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
 		{
@@ -185,6 +152,7 @@ public class Manager extends Application
 			e1.printStackTrace();
 		}
 
+		destinationFile="image" + i + ".jpg";
 		System.out.println(destinationFile);
 		return destinationFile;//return image location
 	}
