@@ -30,9 +30,7 @@ public class Manager extends Application
 	DataPlot DataPlot=new DataPlot("Time", "Spots");
 
 	Image Image;
-	Image Image2=new Image("image2.jpg");
 	ImageView ImageView=new ImageView(Image);
-	ImageView ImageView2=new ImageView(Image2);
 
 	TextArea taDescription;
 	TextArea taDisplay;
@@ -67,6 +65,7 @@ public class Manager extends Application
 		try 
 		{
 			imageLocation=ImagePull();
+			System.out.println(imageLocation);
 		}
 		catch (IOException IOE)
 		{
@@ -79,8 +78,7 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 		
-		ImageView=new ImageView(new Image(imageLocation));
-//		ImageView=new ImageView(new Image("image3.jpg"));
+//		ImageView=new ImageView(new Image(imageLocation));
 
 		BorderPane.setLeft(DataPlot);
 		BorderPane.setTop(txtSpots);//place text area in top pane
@@ -101,11 +99,11 @@ public class Manager extends Application
 		do//avoid overwriting existing images
 		{
 			i++;
-			check=new File("src\\image" + i + ".jpg").exists();
+			check=new File("image" + i + ".jpg").exists();
 		}while (check==true);
 
-		String destinationFile="src\\image" + i + ".jpg";//set image destination
-
+		String destinationFile="image" + i + ".jpg";//set image destination
+		
 		try {saveImage(imageUrl, destinationFile);}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
 		{
@@ -113,7 +111,7 @@ public class Manager extends Application
 			e1.printStackTrace();
 		}
 
-		destinationFile="image" + (i-49) + ".jpg";
+		destinationFile="image" + i + ".jpg";
 		System.out.println(destinationFile);
 		return destinationFile;//return image location
 	}
