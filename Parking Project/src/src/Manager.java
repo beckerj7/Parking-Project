@@ -51,12 +51,12 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
+		int g=1;
+		
 		//GUI assembly
 		BorderPane=new BorderPane();
 
 		Pane=new Pane();
-
-		txtSpots=new Text("Number of parking spots available: " +spots);
 
 		Button btLeft=new Button("Left");
 		Button btRight=new Button("Right");
@@ -70,7 +70,7 @@ public class Manager extends Application
 		ImageView.setFitWidth(800);//imageView formatting
 		ImageView.setPreserveRatio(true);
 
-		taDisplay.setText("Number of parking spots available: ");//set text to be displayed
+		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
 		DataPlot.Plot(24, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
@@ -95,15 +95,34 @@ public class Manager extends Application
 //		ImageView=new ImageView(new Image(imageLocation));
 
 		
-		BorderPane.setCenter(VBoxGraph);
-		BorderPane.setLeft(txtSpots);//place text area in top pane
-		BorderPane.setRight(ImageView);//place image in center pane
+		BorderPane.setLeft(VBoxGraph);//place graph in bottom pane
+		BorderPane.setCenter(ImageView);//place image in center pane
+		BorderPane.setTop(taDisplay);//place text area in left pane
+
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
+		
+		btLeft.setOnAction(e->Left(g, this));
+		btRight.setOnAction(e->Right(g, this));
 	}//end of method start
 
+	
+	public int Left(int g, Manager Manager)
+	{
+		g--;
+		
+		return g;
+	}
+	
+	public int Right(int g, Manager Manager)
+	{
+		g++;
+		
+		return g;
+	}
+	
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
