@@ -26,10 +26,10 @@ public class Manager extends Application
 	BorderPane BorderPane;//create GUI elements
 	Pane Pane;
 	Scene Scene;
-	
+
 	HBox HBoxBt;
 	VBox VBoxGraph;
-	
+
 	int spots = display.spotsAvailable;
 	String imageLocation;
 
@@ -54,7 +54,7 @@ public class Manager extends Application
 	{
 		int g=0;
 		DataPlot[] Plots=new DataPlot[7];
-		
+
 		//GUI assembly
 		BorderPane=new BorderPane();
 
@@ -62,10 +62,10 @@ public class Manager extends Application
 
 		Button btLeft=new Button("Left");
 		Button btRight=new Button("Right");
-		
+
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
-		
+
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
 
@@ -93,23 +93,23 @@ public class Manager extends Application
 			System.out.println("Something is wrong with the image pull and I don`t know what!");
 			e.printStackTrace();
 		}
-		
+
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
 			System.out.println("Did not sleep");
 			e1.printStackTrace();
-				
-		try
-		{
-			ImageView=new ImageView(new Image(imageLocation));
+
+			try
+			{
+				ImageView=new ImageView(new Image(imageLocation));
+			}
+			catch (Exception E)
+			{
+				E.printStackTrace();
+			}
 		}
-		catch (Exception E)
-		{
-			E.printStackTrace();
-		}
-}
-		
+
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
 		BorderPane.setCenter(ImageView);//place image in center pane
 		BorderPane.setLeft(taDisplay);//place text area in left pane
@@ -118,26 +118,26 @@ public class Manager extends Application
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
-		
+
 		btLeft.setOnAction(e->Left(g, this));
 		btRight.setOnAction(e->Right(g, this));
 	}//end of method start
 
-	
+
 	public int Left(int g, Manager Manager)
 	{
 		g--;
-		
+
 		return g;
 	}
-	
+
 	public int Right(int g, Manager Manager)
 	{
 		g++;
-		
+
 		return g;
 	}
-	
+
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
@@ -152,7 +152,7 @@ public class Manager extends Application
 		}while (check==true);
 
 		String destinationFile="image" + i + ".jpg";//set image destination
-		
+
 		try {saveImage(imageUrl, destinationFile);}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
 		{
