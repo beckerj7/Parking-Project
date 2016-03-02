@@ -14,25 +14,15 @@ public class DataPlot extends LineChart<Number,Number>
 		setLegendVisible(false);
 	}//end of method DataPlot
 
-	
-	public void Plot(int time, int spots, Manager Manager)
+
+	public void Plot(int c, Manager Manager)
 	{
+		int i;
+
 		setTitle(getYAxis().getLabel() + " vs " + getXAxis().getLabel());//set the title
 		XYChart.Series<Number, Number> series=new XYChart.Series<Number, Number>();//create new plot
 
-		try {series.getData().add(new XYChart.Data<Number, Number>(time, spots));}//plot the datapoint
-		catch (Exception e) {Manager.taDisplay.appendText("Something went wrong with the dataplot!");}
-
-		getData().add(series);
-	}//end of method Plot
-	
-	
-	public void Plot(int i, long it, Manager Manager)
-	{
-		setTitle(getYAxis().getLabel() + " vs " + getXAxis().getLabel());//set the title
-		XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();//create new plot
-
-		try {series.getData().add(new XYChart.Data<Number, Number>(i, it));}//plot the datapoint
+		try {for (i=0; i<c; i++) series.getData().add(new XYChart.Data<Number, Number>(i, i));}//plot the datapoint
 		catch (Exception e) {Manager.taDisplay.appendText("Something went wrong with the dataplot!");}
 
 		getData().add(series);

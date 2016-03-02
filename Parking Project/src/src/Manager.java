@@ -44,7 +44,6 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
-		int i;
 		//GUI assembly
 		BorderPane=new BorderPane();
 
@@ -60,7 +59,7 @@ public class Manager extends Application
 
 		taDisplay.setText("Number of parking spots available: N/A");//set text to be displayed
 
-		for (i=0; i<10; i++) DataPlot.Plot(i, i, this);//create test dataplot for GUI
+		DataPlot.Plot(10, this);//create test dataplot for GUI
 
 		try 
 		{
