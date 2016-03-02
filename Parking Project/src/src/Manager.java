@@ -5,7 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URL;import src.display;
+
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -78,7 +79,7 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 		
-		ImageView=new ImageView(new Image(imageLocation));
+		//ImageView=new ImageView(new Image(imageLocation));
 
 		
 		BorderPane.setCenter(DataPlot);
