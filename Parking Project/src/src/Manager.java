@@ -9,11 +9,14 @@ import java.net.URL;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -22,6 +25,9 @@ public class Manager extends Application
 	BorderPane BorderPane;//create GUI elements
 	Pane Pane;
 	Scene Scene;
+	
+	HBox HBoxBt;
+	VBox VBoxGraph;
 	
 	int spots = display.spotsAvailable;
 	String imageLocation;
@@ -52,6 +58,12 @@ public class Manager extends Application
 
 		txtSpots=new Text("Number of parking spots available: " +spots);
 
+		Button btLeft=new Button("Left");
+		Button btRight=new Button("Right");
+		
+		HBoxBt=new HBox();
+		VBoxGraph=new VBox();
+		
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
 
@@ -61,6 +73,8 @@ public class Manager extends Application
 		taDisplay.setText("Number of parking spots available: ");//set text to be displayed
 
 		DataPlot.Plot(24, this);//create test dataplot for GUI
+		HBoxBt.getChildren().addAll(btLeft, btRight);
+		VBoxGraph.getChildren().addAll(HBoxBt, DataPlot);
 
 		try 
 		{
@@ -78,12 +92,12 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 		
-		ImageView=new ImageView(new Image(imageLocation));
+//		ImageView=new ImageView(new Image(imageLocation));
 
 		
-		BorderPane.setCenter(DataPlot);
-		BorderPane.setTop(txtSpots);//place text area in top pane
-		BorderPane.setLeft(ImageView);//place image in center pane
+		BorderPane.setCenter(VBoxGraph);
+		BorderPane.setLeft(txtSpots);//place text area in top pane
+		BorderPane.setRight(ImageView);//place image in center pane
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
