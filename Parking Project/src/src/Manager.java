@@ -26,6 +26,7 @@ public class Manager extends Application
 	BorderPane BorderPane;//create GUI elements
 	Pane Pane;
 	Scene Scene;
+	int g=0;
 
 	HBox HBoxBt;
 	VBox VBoxGraph;
@@ -52,7 +53,7 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
-		int g=0;
+		
 		int i;
 		DataPlot[] Plots=new DataPlot[7];
 		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots");
@@ -62,8 +63,8 @@ public class Manager extends Application
 
 		Pane=new Pane();
 
-		Button btLeft=new Button("<--");
-		Button btRight=new Button("-->");
+		Button btLeft=new Button("<---");
+		Button btRight=new Button("--->");
 
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
@@ -79,8 +80,7 @@ public class Manager extends Application
 
 		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
-		DataPlot.Plot(24, this);//create test dataplot for GUI
-		for (i=0; i<7; i++) Plots[i].Plot(i*4, this);//create test dataplot for GUI
+		for (i=0; i<7; i++) Plots[i].Plot(5+i*4, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
 
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
@@ -126,7 +126,7 @@ public class Manager extends Application
 	}//end of method start
 
 
-	public int Left(int g, DataPlot Plots[])
+	public void Left(int g, DataPlot Plots[])
 	{
 		g--;
 		if (g<0) g=6;
@@ -141,10 +141,10 @@ public class Manager extends Application
 			E.printStackTrace();
 		}
 		System.out.println("Left complete");
-		return g;
+		this.g=g;
 	}
 
-	public int Right(int g, DataPlot Plots[])
+	public void Right(int g, DataPlot Plots[])
 	{
 		g++;
 		if (g>6) g=0;
@@ -160,7 +160,7 @@ public class Manager extends Application
 		}
 
 		System.out.println("Right complete");
-		return g;
+		this.g=g;
 	}
 
 	public static String ImagePull() throws Exception
@@ -185,6 +185,7 @@ public class Manager extends Application
 			e1.printStackTrace();
 		}
 
+		
 		System.out.println(destinationFile);
 		return destinationFile;//return image location
 	}
