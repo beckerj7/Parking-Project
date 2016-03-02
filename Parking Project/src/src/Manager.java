@@ -7,14 +7,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;import src.display;
 
-
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -23,6 +25,9 @@ public class Manager extends Application
 	BorderPane BorderPane;//create GUI elements
 	Pane Pane;
 	Scene Scene;
+	
+	HBox HBoxBt;
+	VBox VBoxGraph;
 	
 	int spots = display.spotsAvailable;
 	String imageLocation;
@@ -46,22 +51,36 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
+		int g=0;
+		int i;
+		DataPlot[] Plots=new DataPlot[7];
+		
 		//GUI assembly
 		BorderPane=new BorderPane();
 
 		Pane=new Pane();
 
-		txtSpots=new Text("Number of parking spots available: " +spots);
-
+		Button btLeft=new Button("Left");
+		Button btRight=new Button("Right");
+		
+		HBoxBt=new HBox();
+		VBoxGraph=new VBox();
+		
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
 
 		ImageView.setFitWidth(800);//imageView formatting
 		ImageView.setPreserveRatio(true);
 
-		taDisplay.setText("Number of parking spots available: ");//set text to be displayed
+		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
-		DataPlot.Plot(24, this);//create test dataplot for GUI
+		for (i=0; i<7; i++)
+			{
+			DataPlot.Plot(g, this);//create test dataplot for GUI	
+			}
+		
+		HBoxBt.getChildren().addAll(btLeft, btRight);
+		VBoxGraph.getChildren().addAll(HBoxBt, DataPlot);
 
 		try 
 		{
@@ -80,17 +99,37 @@ public class Manager extends Application
 		}
 		
 		//ImageView=new ImageView(new Image(imageLocation));
+//		ImageView=new ImageView(new Image(imageLocation));
 
 		
-		BorderPane.setCenter(DataPlot);
-		BorderPane.setTop(txtSpots);//place text area in top pane
-		BorderPane.setLeft(ImageView);//place image in center pane
+		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
+		BorderPane.setCenter(ImageView);//place image in center pane
+		BorderPane.setLeft(taDisplay);//place text area in left pane
+
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
+		
+		btLeft.setOnAction(e->Left(g, this));
+		btRight.setOnAction(e->Right(g, this));
 	}//end of method start
 
+	
+	public int Left(int g, Manager Manager)
+	{
+		g--;
+		
+		return g;
+	}
+	
+	public int Right(int g, Manager Manager)
+	{
+		g++;
+		
+		return g;
+	}
+	
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
