@@ -22,7 +22,8 @@ public class Manager extends Application
 	BorderPane BorderPane;//create GUI elements
 	Pane Pane;
 	Scene Scene;
-
+	
+	int spots = display.spotsAvailable;
 	String imageLocation;
 
 	Text txtSpots;
@@ -49,7 +50,7 @@ public class Manager extends Application
 
 		Pane=new Pane();
 
-		txtSpots=new Text("Number of parking spots available: N/A");
+		txtSpots=new Text("Number of parking spots available: " +spots);
 
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
@@ -57,9 +58,9 @@ public class Manager extends Application
 		ImageView.setFitWidth(800);//imageView formatting
 		ImageView.setPreserveRatio(true);
 
-		taDisplay.setText("Number of parking spots available: N/A");//set text to be displayed
+		taDisplay.setText("Number of parking spots available: ");//set text to be displayed
 
-		DataPlot.Plot(10, this);//create test dataplot for GUI
+		DataPlot.Plot(24, this);//create test dataplot for GUI
 
 		try 
 		{
@@ -77,11 +78,11 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 		
-//		ImageView=new ImageView(new Image(imageLocation));
+		ImageView=new ImageView(new Image(imageLocation));
 
-		BorderPane.setLeft(DataPlot);
+		BorderPane.setCenter(DataPlot);
 		BorderPane.setTop(txtSpots);//place text area in top pane
-		BorderPane.setCenter(ImageView);//place image in center pane
+		BorderPane.setLeft(ImageView);//place image in center pane
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
