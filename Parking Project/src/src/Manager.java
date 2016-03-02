@@ -1,11 +1,13 @@
 package src;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -51,7 +53,6 @@ public class Manager extends Application
 	public void start(Stage Stage)
 	{
 		int g=0;
-		int i;
 		DataPlot[] Plots=new DataPlot[7];
 		
 		//GUI assembly
@@ -73,11 +74,7 @@ public class Manager extends Application
 
 		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
-		for (i=0; i<7; i++)
-			{
-			DataPlot.Plot(g, this);//create test dataplot for GUI	
-			}
-		
+		DataPlot.Plot(24, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
 		VBoxGraph.getChildren().addAll(HBoxBt, DataPlot);
 
@@ -97,8 +94,21 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 		
-//		ImageView=new ImageView(new Image(imageLocation));
-
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			System.out.println("Did not sleep");
+			e1.printStackTrace();
+				
+		try
+		{
+			ImageView=new ImageView(new Image(imageLocation));
+		}
+		catch (Exception E)
+		{
+			E.printStackTrace();
+		}
+}
 		
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
 		BorderPane.setCenter(ImageView);//place image in center pane
@@ -150,7 +160,6 @@ public class Manager extends Application
 			e1.printStackTrace();
 		}
 
-		destinationFile="image" + i + ".jpg";
 		System.out.println(destinationFile);
 		return destinationFile;//return image location
 	}
