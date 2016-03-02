@@ -80,6 +80,7 @@ public class Manager extends Application
 		
 		ImageView=new ImageView(new Image(imageLocation));
 
+		
 		BorderPane.setCenter(DataPlot);
 		BorderPane.setTop(txtSpots);//place text area in top pane
 		BorderPane.setLeft(ImageView);//place image in center pane
