@@ -78,7 +78,7 @@ public class Manager extends Application
 
 		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
 
-		for (i=0; i<7; i++) Plots[i].Plot(5+i*4, this);//create test dataplot for GUI
+		for (i=0; i<7; i++) Plots[i].Plot(i, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
 
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
@@ -126,58 +126,23 @@ public class Manager extends Application
 
 	public void Left(int g, DataPlot Plots[])
 	{
-		String day=null;
-		
 		g--;
 		if (g<0) g=6;
-		if (g==0) day="Sunday";
-		if (g==1) day="Monday";
-		if (g==2) day="Tuesday";
-		if (g==3) day="Wednesday";
-		if (g==4) day="Thursday";
-		if (g==5) day="Friday";
-		if (g==6) day="Saturday";
-		
-		try{
-			VBoxGraph.getChildren().clear();
-			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-			taDisplay.appendText("\nDisplaying plot " + day);
-		}
-		catch (Exception E)
-		{
-			System.out.println("Couldn`t add to VBox");
-			E.printStackTrace();
-		}
-		System.out.println("Left complete");
+
+		VBoxGraph.getChildren().clear();
+		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
+
 		this.g=g;
 	}
 
 	public void Right(int g, DataPlot Plots[])
 	{
-		String day=null;
-		
 		g++;
 		if (g>6) g=0;
-		if (g==0) day="Sunday";
-		if (g==1) day="Monday";
-		if (g==2) day="Tuesday";
-		if (g==3) day="Wednesday";
-		if (g==4) day="Thursday";
-		if (g==5) day="Friday";
-		if (g==6) day="Saturday";
-		
-		try{
-			VBoxGraph.getChildren().clear();
-			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-			taDisplay.appendText("\nDisplaying plot " + day);
-		}
-		catch (Exception E)
-		{
-			System.out.println("Couldn`t add to VBox");
-			E.printStackTrace();
-		}
 
-		System.out.println("Right complete");
+		VBoxGraph.getChildren().clear();
+		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
+
 		this.g=g;
 	}
 
@@ -202,7 +167,6 @@ public class Manager extends Application
 			System.out.println("Something went wrong with the file I/O!");//error notification message
 			e1.printStackTrace();
 		}
-
 
 		System.out.println(destinationFile);
 		return destinationFile;//return image location

@@ -2,13 +2,8 @@ package src;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -28,44 +23,53 @@ public class DataPlot extends LineChart<Number,Number>
 	}//end of method DataPlot
 
 
-	public void Plot(int c, Manager Manager)
+	public void Plot(int i, Manager Manager)
 	{
-		int i;
 		int j;
 		int[][] Hist=new int[7][96];
 		String line;
+		String day=null;
 
 		try
 		{
-			for (i=0; i<7; i++)
-			{
-				File fil=new File("Day" + i + ".txt");
-				FileReader inputFil=new FileReader(fil);
-				BufferedReader in=new BufferedReader(inputFil);
-				line=in.readLine();
+			File fil=new File("Day" + i + " Dummy.txt");
+			FileReader inputFil=new FileReader(fil);
+			BufferedReader in=new BufferedReader(inputFil);
+			line=in.readLine();
 
-				for (j=0; j<96; j++)
-				{
-					while(line!=null)
-					{
-						Hist[i][j]=Integer.parseInt(line); //this is line 19
-						System.out.println(Hist[i][j]);
-						line=in.readLine();
-					}				
-				}
-				in.close();
+			for (j=0; j<96; j++)
+			{
+				Hist[i][j]=Integer.parseInt(line); //this is line 19
+				line=in.readLine();			
+				//				System.out.println(i + "\t" + j + "\t" + Hist[i][j]);
 			}
+			in.close();
 		}
 		catch (IOException IOE)
 		{
 			System.out.println("Something is wrong with the dataplot file I/O!");
 			IOE.printStackTrace();
 		}
-
-		setTitle(getYAxis().getLabel() + " vs " + getXAxis().getLabel());//set the title
+		
+		if (i==0) day="Sunday";
+		if (i==1) day="Monday";
+		if (i==2) day="Tuesday";
+		if (i==3) day="Wednesday";
+		if (i==4) day="Thursday";
+		if (i==5) day="Friday";
+		if (i==6) day="Saturday";
+		
+		setTitle(day);//set the title
 		XYChart.Series<Number, Number> series=new XYChart.Series<Number, Number>();//create new plot
 
-		try {for (i=0; i<c; i++) series.getData().add(new XYChart.Data<Number, Number>(i, i+c));}//plot the datapoint
+		try//plot each datapoint 
+		{
+			for (j=0; j<96; j++)
+			{
+				System.out.println(i + "\t" + j + "\t" + Hist[i][j]);
+				series.getData().add(new XYChart.Data<Number, Number>(j, Hist[i][j]));
+			}
+		}
 		catch (Exception e) {Manager.taDisplay.appendText("Something went wrong with the dataplot!");}
 
 		getData().add(series);
