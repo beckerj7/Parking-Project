@@ -4,22 +4,23 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
-public class DataPlot extends LineChart<Number,Number>
+public class DataPlot extends LineChart<String,Number>
 {
-	/**
-	 * @param PlotX
-	 * @param PlotY
-	 */
 	public DataPlot(String PlotX, String PlotY)
 	{
-		super(new NumberAxis(), new NumberAxis());
-		this.getXAxis().setLabel(PlotX);//label x-axis
+		super(new CategoryAxis(), new NumberAxis());
+//		final CategoryAxis xAxis=new CategoryAxis();
+//        final NumberAxis yAxis=new NumberAxis();
+//        final LineChart<String,Number> lineChart=new LineChart<String,Number>(xAxis,yAxis);
+        this.getXAxis().setLabel(PlotX);//label x-axis
 		this.getYAxis().setLabel(PlotY);//label y-axis
-		setLegendVisible(false);
+		
+        setLegendVisible(false);
 	}//end of method DataPlot
 
 
@@ -29,6 +30,7 @@ public class DataPlot extends LineChart<Number,Number>
 		int[][] Hist=new int[7][96];
 		String line;
 		String day=null;
+		String time=null;
 
 		try
 		{
@@ -41,7 +43,6 @@ public class DataPlot extends LineChart<Number,Number>
 			{
 				Hist[i][j]=Integer.parseInt(line); //this is line 19
 				line=in.readLine();			
-				//				System.out.println(i + "\t" + j + "\t" + Hist[i][j]);
 			}
 			in.close();
 		}
@@ -60,14 +61,15 @@ public class DataPlot extends LineChart<Number,Number>
 		if (i==6) day="Saturday";
 		
 		setTitle(day);//set the title
-		XYChart.Series<Number, Number> series=new XYChart.Series<Number, Number>();//create new plot
+		javafx.scene.chart.XYChart.Series<String, Number> series=new XYChart.Series<String, Number>();//create new plot
 
 		try//plot each datapoint 
 		{
 			for (j=0; j<96; j++)
 			{
+				time="Min" + j;
 				System.out.println(i + "\t" + j + "\t" + Hist[i][j]);
-				series.getData().add(new XYChart.Data<Number, Number>(j, Hist[i][j]));
+				series.getData().add(new XYChart.Data<String, Number>(time, Hist[i][j]));
 			}
 		}
 		catch (Exception e) {Manager.taDisplay.appendText("Something went wrong with the dataplot!");}
