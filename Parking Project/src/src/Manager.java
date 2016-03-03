@@ -1,13 +1,11 @@
 package src;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -53,7 +51,7 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
-		
+
 		int i;
 		DataPlot[] Plots=new DataPlot[7];
 		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots");
@@ -120,7 +118,7 @@ public class Manager extends Application
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
-		
+
 		btLeft.setOnAction(e->Left(g, Plots));
 		btRight.setOnAction(e->Right(g, Plots));
 	}//end of method start
@@ -128,12 +126,22 @@ public class Manager extends Application
 
 	public void Left(int g, DataPlot Plots[])
 	{
+		String day=null;
+		
 		g--;
 		if (g<0) g=6;
+		if (g==0) day="Sunday";
+		if (g==1) day="Monday";
+		if (g==2) day="Tuesday";
+		if (g==3) day="Wednesday";
+		if (g==4) day="Thursday";
+		if (g==5) day="Friday";
+		if (g==6) day="Saturday";
+		
 		try{
 			VBoxGraph.getChildren().clear();
 			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-			taDisplay.appendText("\nDisplaying plot " + g);
+			taDisplay.appendText("\nDisplaying plot " + day);
 		}
 		catch (Exception E)
 		{
@@ -146,12 +154,22 @@ public class Manager extends Application
 
 	public void Right(int g, DataPlot Plots[])
 	{
+		String day=null;
+		
 		g++;
 		if (g>6) g=0;
+		if (g==0) day="Sunday";
+		if (g==1) day="Monday";
+		if (g==2) day="Tuesday";
+		if (g==3) day="Wednesday";
+		if (g==4) day="Thursday";
+		if (g==5) day="Friday";
+		if (g==6) day="Saturday";
+		
 		try{
 			VBoxGraph.getChildren().clear();
 			VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-			taDisplay.appendText("\nDisplaying plot " + g);
+			taDisplay.appendText("\nDisplaying plot " + day);
 		}
 		catch (Exception E)
 		{
@@ -185,7 +203,7 @@ public class Manager extends Application
 			e1.printStackTrace();
 		}
 
-		
+
 		System.out.println(destinationFile);
 		return destinationFile;//return image location
 	}
