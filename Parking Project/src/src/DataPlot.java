@@ -80,8 +80,6 @@ public class DataPlot extends LineChart<String,Number>
 				else if (Integer.parseInt(time)<1000) head="0";
 				else head="";
 				
-				System.out.println(time);
-				System.out.println(i + "\t" + j + "\t" + Hist[i][j]);
 				series.getData().add(new XYChart.Data<String, Number>(head + time, Hist[i][j]));
 			}
 		}
