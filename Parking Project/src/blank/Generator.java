@@ -11,7 +11,7 @@ public class Generator {
 		int i;
 		int j;
 		int f;
-		int max=24;
+		int max=22;
 		int min=0;
 		int rand;
 		Random rn = new Random();

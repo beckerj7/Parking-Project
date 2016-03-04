@@ -53,10 +53,12 @@ public class Manager extends Application
 	}//end of main method
 
 
+	/* (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	@Override
 	public void start(Stage Stage)
 	{
-
 		int i;
 		DataPlot[] Plots=new DataPlot[7];
 		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots");
