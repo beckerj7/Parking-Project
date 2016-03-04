@@ -6,7 +6,7 @@ package src;
  */
 public class display {
 	//creates variable spotsAvailable with assigned value
-	public static int spotsAvailable = 13;
+	public static int spotsAvailable = 22;
 	
 
 }
