@@ -100,6 +100,23 @@ public class Manager extends Application
 		    SimpleDateFormat Minute = new SimpleDateFormat ("mm");
 		    String sMinute = Minute.format(DandT);
 		    taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
+		    int d;
+		      switch (sDate){
+		      case "Sun": d = 0;
+		      break;
+		      case "Mon": d = 1;
+		      break;
+		      case "Tue": d = 2;
+		      break;
+		      case "Wed": d = 3;
+		      break;
+		      case "Thu": d = 4;
+		      break;
+		      case "Fri": d = 5;
+		      break;
+		      case "Sat": d = 6;
+		      break;
+		      }
 		}
 		catch (IOException IOE)
 		{
