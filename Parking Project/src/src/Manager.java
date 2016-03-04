@@ -73,7 +73,7 @@ public class Manager extends Application
 		Button btLeft=new Button("<---");
 		Button btRight=new Button("--->");
 		Button btRefresh=new Button("Refresh");
-
+//
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
 		VBoxDisplay=new VBox();
