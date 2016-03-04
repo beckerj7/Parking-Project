@@ -31,11 +31,12 @@ public class Manager extends Application
 
 	HBox HBoxBt;
 	VBox VBoxGraph;
+	VBox VBoxDisplay;
 
 	int spots = display.spotsAvailable;
 	String imageLocation;
-	
-	
+
+
 
 	Text txtSpots;
 
@@ -70,9 +71,11 @@ public class Manager extends Application
 
 		Button btLeft=new Button("<---");
 		Button btRight=new Button("--->");
+		Button btRefresh=new Button("Refresh");
 
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
+		VBoxDisplay=new VBox();
 
 		taDisplay=new TextArea();//text area creation/formatting
 		taDisplay.setEditable(false);
@@ -87,6 +90,7 @@ public class Manager extends Application
 
 		for (i=0; i<7; i++) Plots[i].Plot(i, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
+		VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);
 
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
 
@@ -95,30 +99,30 @@ public class Manager extends Application
 			imageLocation=ImagePull();
 			System.out.println(imageLocation);
 			Date DandT = new Date( );
-		    SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
-		    String sDate = DayOfWeek.format(DandT);
-		    SimpleDateFormat Hour = new SimpleDateFormat ("kk");
-		    String sHour = Hour.format(DandT);
-		    SimpleDateFormat Minute = new SimpleDateFormat ("mm");
-		    String sMinute = Minute.format(DandT);
-		    taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
-		    int d;
-		      switch (sDate){
-		      case "Sun": d = 0;
-		      break;
-		      case "Mon": d = 1;
-		      break;
-		      case "Tue": d = 2;
-		      break;
-		      case "Wed": d = 3;
-		      break;
-		      case "Thu": d = 4;
-		      break;
-		      case "Fri": d = 5;
-		      break;
-		      case "Sat": d = 6;
-		      break;
-		      }
+			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
+			String sDate = DayOfWeek.format(DandT);
+			SimpleDateFormat Hour = new SimpleDateFormat ("kk");
+			String sHour = Hour.format(DandT);
+			SimpleDateFormat Minute = new SimpleDateFormat ("mm");
+			String sMinute = Minute.format(DandT);
+			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
+			int d;
+			switch (sDate){
+			case "Sun": d = 0;
+			break;
+			case "Mon": d = 1;
+			break;
+			case "Tue": d = 2;
+			break;
+			case "Wed": d = 3;
+			break;
+			case "Thu": d = 4;
+			break;
+			case "Fri": d = 5;
+			break;
+			case "Sat": d = 6;
+			break;
+			}
 		}
 		catch (IOException IOE)
 		{
@@ -144,17 +148,72 @@ public class Manager extends Application
 
 
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
-		BorderPane.setLeft(taDisplay);//place text area in left pane
+		BorderPane.setLeft(VBoxDisplay);//place text area in left pane
 
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
-
+		btRefresh.setOnAction(e->Refresh());
 		btLeft.setOnAction(e->Left(g, Plots));
 		btRight.setOnAction(e->Right(g, Plots));
 	}//end of method start
 
+	public void Refresh()
+	{
+		int i;
+		
+		try 
+		{
+			imageLocation=ImagePull();
+			System.out.println(imageLocation);
+			Date DandT = new Date( );
+			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
+			String sDate = DayOfWeek.format(DandT);
+			SimpleDateFormat Hour = new SimpleDateFormat ("kk");
+			String sHour = Hour.format(DandT);
+			SimpleDateFormat Minute = new SimpleDateFormat ("mm");
+			String sMinute = Minute.format(DandT);
+			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
+			int d;
+			switch (sDate){
+			case "Sun": d = 0;
+			break;
+			case "Mon": d = 1;
+			break;
+			case "Tue": d = 2;
+			break;
+			case "Wed": d = 3;
+			break;
+			case "Thu": d = 4;
+			break;
+			case "Fri": d = 5;
+			break;
+			case "Sat": d = 6;
+			break;
+			}
+		}
+		catch (IOException IOE)
+		{
+			System.out.println("Something is wrong with the file I/O!");
+			IOE.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Something is wrong with the image pull and I don`t know what!");
+			e.printStackTrace();
+		}
+		try
+		{
+			ImageView=new ImageView(new Image(imageLocation));
+			BorderPane.setCenter(ImageView);//place image in center pane
+		}
+		catch (Exception E)
+		{
+			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
+			BorderPane.setCenter(taReport);//place image in center pane
+		}
+	}
 
 	public void Left(int g, DataPlot Plots[])
 	{
@@ -219,5 +278,5 @@ public class Manager extends Application
 		is.close();
 		os.close();
 	}
-	
+
 }//end of class Manager
