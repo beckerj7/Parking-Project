@@ -34,6 +34,7 @@ public class Manager extends Application
 	VBox VBoxDisplay;
 
 	int spots = display.spotsAvailable;
+	int taken = display.spotsTaken;
 	String imageLocation;
 
 
@@ -86,7 +87,7 @@ public class Manager extends Application
 		ImageView.setFitWidth(800);//imageView formatting
 		ImageView.setPreserveRatio(true);
 
-		taDisplay.setText("Number of parking spots available: " + spots);//set text to be displayed
+		taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 
 		for (i=0; i<7; i++) Plots[i].Plot(i, this);//create test dataplot for GUI
 		HBoxBt.getChildren().addAll(btLeft, btRight);
