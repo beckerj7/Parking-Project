@@ -99,6 +99,7 @@ public class Manager extends Application
 		    String sHour = Hour.format(DandT);
 		    SimpleDateFormat Minute = new SimpleDateFormat ("mm");
 		    String sMinute = Minute.format(DandT);
+		    taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
 		}
 		catch (IOException IOE)
 		{
