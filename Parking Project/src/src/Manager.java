@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,6 +34,8 @@ public class Manager extends Application
 
 	int spots = display.spotsAvailable;
 	String imageLocation;
+	
+	
 
 	Text txtSpots;
 
@@ -87,6 +92,13 @@ public class Manager extends Application
 		{
 			imageLocation=ImagePull();
 			System.out.println(imageLocation);
+			Date DandT = new Date( );
+		    SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
+		    String sDate = DayOfWeek.format(DandT);
+		    SimpleDateFormat Hour = new SimpleDateFormat ("kk");
+		    String sHour = Hour.format(DandT);
+		    SimpleDateFormat Minute = new SimpleDateFormat ("mm");
+		    String sMinute = Minute.format(DandT);
 		}
 		catch (IOException IOE)
 		{
@@ -187,4 +199,5 @@ public class Manager extends Application
 		is.close();
 		os.close();
 	}
+	
 }//end of class Manager
