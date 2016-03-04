@@ -14,9 +14,6 @@ public class DataPlot extends LineChart<String,Number>
 	public DataPlot(String PlotX, String PlotY)
 	{
 		super(new CategoryAxis(), new NumberAxis());
-//		final CategoryAxis xAxis=new CategoryAxis();
-//        final NumberAxis yAxis=new NumberAxis();
-//        final LineChart<String,Number> lineChart=new LineChart<String,Number>(xAxis,yAxis);
         this.getXAxis().setLabel(PlotX);//label x-axis
 		this.getYAxis().setLabel(PlotY);//label y-axis
 		
@@ -27,10 +24,12 @@ public class DataPlot extends LineChart<String,Number>
 	public void Plot(int i, Manager Manager)
 	{
 		int j;
+		int k;
 		int[][] Hist=new int[7][96];
 		String line;
 		String day=null;
-		String time=null;
+		String time="0";
+		String head;
 
 		try
 		{
@@ -65,14 +64,28 @@ public class DataPlot extends LineChart<String,Number>
 
 		try//plot each datapoint 
 		{
+			k=0;
+			
 			for (j=0; j<96; j++)
 			{
-				time="Min" + j;
+				k++;
+				
+				time=String.valueOf(Integer.parseInt(time)+15);
+				if (k==4)
+				{
+					k=0;
+					time=String.valueOf(Integer.parseInt(time)+40);
+				}
+				if (Integer.parseInt(time)<100) head="00";
+				else if (Integer.parseInt(time)<1000) head="0";
+				else head="";
+				
+				System.out.println(time);
 				System.out.println(i + "\t" + j + "\t" + Hist[i][j]);
-				series.getData().add(new XYChart.Data<String, Number>(time, Hist[i][j]));
+				series.getData().add(new XYChart.Data<String, Number>(head + time, Hist[i][j]));
 			}
 		}
-		catch (Exception e) {Manager.taDisplay.appendText("Something went wrong with the dataplot!");}
+		catch (Exception e) {Manager.taDisplay.appendText("\nSomething went wrong with the dataplot!");}
 
 		getData().add(series);
 	}//end of method Plot
