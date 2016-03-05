@@ -73,7 +73,7 @@ public class Manager extends Application
 		Button btLeft=new Button("<---");
 		Button btRight=new Button("--->");
 		Button btRefresh=new Button("Refresh");
-//
+
 		HBoxBt=new HBox();
 		VBoxGraph=new VBox();
 		VBoxDisplay=new VBox();
@@ -175,6 +175,8 @@ public class Manager extends Application
 			String sHour = Hour.format(DandT);
 			SimpleDateFormat Minute = new SimpleDateFormat ("mm");
 			String sMinute = Minute.format(DandT);
+			taDisplay.clear();
+			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
 			int d;
 			switch (sDate){
@@ -211,6 +213,7 @@ public class Manager extends Application
 		}
 		catch (Exception E)
 		{
+			taReport.clear();
 			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
 			BorderPane.setCenter(taReport);//place image in center pane
 		}
