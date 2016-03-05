@@ -282,5 +282,4 @@ public class Manager extends Application
 		is.close();
 		os.close();
 	}
-
 }//end of class Manager
