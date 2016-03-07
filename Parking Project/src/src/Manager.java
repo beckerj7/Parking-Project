@@ -91,7 +91,6 @@ public class Manager extends Application
 		try 
 		{
 			imageLocation=ImagePull();
-			System.out.println(imageLocation);
 			Date DandT = new Date( );
 			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
 			String sDate = DayOfWeek.format(DandT);//cast to string
@@ -251,8 +250,7 @@ public class Manager extends Application
 			System.out.println("Something went wrong with the file I/O!");//error notification message
 			e1.printStackTrace();
 		}
-
-		System.out.println(destinationFile);
+		
 		return destinationFile;//return image location
 	}//end of method ImagePull
 
