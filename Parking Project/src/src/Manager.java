@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,27 +16,25 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Manager extends Application
 {	
-	BorderPane BorderPane;//create GUI elements
-	Pane Pane;
+	//create GUI elements
+	BorderPane BorderPane;
 	Scene Scene;
-	int g=0;
 
-	HBox HBoxBt;
-	VBox VBoxGraph;
-	VBox VBoxDisplay;
-
+	int d;//numerical day indicator
 	int spots = display.spotsAvailable;
 	int taken = display.spotsTaken;
+
+	HBox HBoxBt;//HBox for buttons
+	VBox VBoxGraph;//VBox for graph
+	VBox VBoxDisplay;//
+
 	String imageLocation;
-
-
 
 	Text txtSpots;
 
@@ -68,8 +65,6 @@ public class Manager extends Application
 		//GUI assembly
 		BorderPane=new BorderPane();
 
-		Pane=new Pane();
-
 		Button btLeft=new Button("<---");
 		Button btRight=new Button("--->");
 		Button btRefresh=new Button("Refresh");
@@ -93,21 +88,19 @@ public class Manager extends Application
 		HBoxBt.getChildren().addAll(btLeft, btRight);
 		VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);
 
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-
 		try 
 		{
 			imageLocation=ImagePull();
 			System.out.println(imageLocation);
 			Date DandT = new Date( );
-			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
-			String sDate = DayOfWeek.format(DandT);
-			SimpleDateFormat Hour = new SimpleDateFormat ("kk");
-			String sHour = Hour.format(DandT);
-			SimpleDateFormat Minute = new SimpleDateFormat ("mm");
-			String sMinute = Minute.format(DandT);
-			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
-			int d;
+			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
+			String sDate = DayOfWeek.format(DandT);//cast to string
+			SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
+			String sHour = Hour.format(DandT);//cast to string
+			SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
+			String sMinute = Minute.format(DandT);//cast to string
+			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+
 			switch (sDate){
 			case "Sun": d = 0;
 			break;
@@ -123,7 +116,9 @@ public class Manager extends Application
 			break;
 			case "Sat": d = 6;
 			break;
+			default: System.out.println("Something went wrong with the switch statement!");
 			}
+			VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
 		}
 		catch (IOException IOE)
 		{
@@ -147,23 +142,21 @@ public class Manager extends Application
 			BorderPane.setCenter(taReport);//place image in center pane
 		}
 
-
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
 		BorderPane.setLeft(VBoxDisplay);//place text area in left pane
-
 
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
 		btRefresh.setOnAction(e->Refresh());
-		btLeft.setOnAction(e->Left(g, Plots));
-		btRight.setOnAction(e->Right(g, Plots));
+		btLeft.setOnAction(e->Left(Plots));
+		btRight.setOnAction(e->Right(Plots));
 	}//end of method start
 
 	public void Refresh()
 	{
 		int i;
-		
+
 		try 
 		{
 			imageLocation=ImagePull();
@@ -178,7 +171,7 @@ public class Manager extends Application
 			taDisplay.clear();
 			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
-			int d;
+
 			switch (sDate){
 			case "Sun": d = 0;
 			break;
@@ -219,34 +212,30 @@ public class Manager extends Application
 		}
 	}
 
-	public void Left(int g, DataPlot Plots[])
+	public void Left(DataPlot Plots[])
 	{
-		g--;
-		if (g<0) g=6;
+		d--;
+		if (d<0) d=6;
 
 		VBoxGraph.getChildren().clear();
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
+		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
+	}//end of method Left
 
-		this.g=g;
-	}
-
-	public void Right(int g, DataPlot Plots[])
+	public void Right(DataPlot Plots[])
 	{
-		g++;
-		if (g>6) g=0;
+		d++;
+		if (d>6) d=0;
 
 		VBoxGraph.getChildren().clear();
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[g]);
-
-		this.g=g;
-	}
+		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
+	}//end of method Right
 
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
 		boolean check;//file existence variable
 
-		String imageUrl="http://construction1.db.erau.edu/jpg/1/image.jpg";
+		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg";
 
 		do//avoid overwriting existing images
 		{
@@ -256,7 +245,7 @@ public class Manager extends Application
 
 		String destinationFile="image" + i + ".jpg";//set image destination
 
-		try {saveImage(imageUrl, destinationFile);}//download and save image
+		try {saveImage(imageURL, destinationFile);}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
 		{
 			System.out.println("Something went wrong with the file I/O!");//error notification message
@@ -265,12 +254,12 @@ public class Manager extends Application
 
 		System.out.println(destinationFile);
 		return destinationFile;//return image location
-	}
+	}//end of method ImagePull
 
 
-	public static void saveImage(String imageUrl, String destinationFile) throws IOException
+	public static void saveImage(String imageURL, String destinationFile) throws IOException
 	{
-		URL url=new URL(imageUrl);
+		URL url=new URL(imageURL);
 		InputStream is=url.openStream();
 		OutputStream os=new FileOutputStream(destinationFile);
 
@@ -281,5 +270,5 @@ public class Manager extends Application
 
 		is.close();
 		os.close();
-	}
+	}//end of method SaveImage
 }//end of class Manager
