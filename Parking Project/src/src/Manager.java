@@ -85,12 +85,12 @@ public class Manager extends Application
 		taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 
 		for (i=0; i<7; i++) Plots[i].Plot(i, this);//create test dataplot for GUI
-		HBoxBt.getChildren().addAll(btLeft, btRight);
-		VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);
+		HBoxBt.getChildren().addAll(btLeft, btRight);//add buttons to HBox
+		VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
 
-		try 
+		try
 		{
-			imageLocation=ImagePull();
+			imageLocation=ImagePull();//download image to local storage
 			Date DandT = new Date( );
 			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
 			String sDate = DayOfWeek.format(DandT);//cast to string
@@ -100,7 +100,7 @@ public class Manager extends Application
 			String sMinute = Minute.format(DandT);//cast to string
 			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
 
-			switch (sDate){
+			switch (sDate){//cast day to a representative number
 			case "Sun": d = 0;
 			break;
 			case "Mon": d = 1;
@@ -152,25 +152,25 @@ public class Manager extends Application
 		btRight.setOnAction(e->Right(Plots));//cycle graph right button listener
 	}//end of method start
 
-	public void Refresh()
+	public void Refresh()//update to current camera image
 	{
 		int i;
 
 		try 
 		{
-			imageLocation=ImagePull();
+			imageLocation=ImagePull();//download image to local storage
 			Date DandT = new Date( );
-			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
-			String sDate = DayOfWeek.format(DandT);
-			SimpleDateFormat Hour = new SimpleDateFormat ("kk");
-			String sHour = Hour.format(DandT);
-			SimpleDateFormat Minute = new SimpleDateFormat ("mm");
-			String sMinute = Minute.format(DandT);
-			taDisplay.clear();
+			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
+			String sDate = DayOfWeek.format(DandT);//cast day to string
+			SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
+			String sHour = Hour.format(DandT);//cast hour to string
+			SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
+			String sMinute = Minute.format(DandT);//cast minute to string
+			taDisplay.clear();//clear the text area
 			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
-			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);
+			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//add date and time to text area
 
-			switch (sDate){
+			switch (sDate){//cast day to representative number
 			case "Sun": d = 0;
 			break;
 			case "Mon": d = 1;
@@ -189,12 +189,12 @@ public class Manager extends Application
 		}
 		catch (IOException IOE)
 		{
-			System.out.println("Something is wrong with the file I/O!");
+			System.out.println("Something is wrong with the file I/O!");//error message
 			IOE.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.out.println("Something is wrong with the image pull and I don`t know what!");
+			System.out.println("Something is wrong with the image pull and I don`t know what!");//error message
 			e.printStackTrace();
 		}
 		try
@@ -205,7 +205,7 @@ public class Manager extends Application
 		catch (Exception E)
 		{
 			taReport.clear();
-			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
+			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");//error message
 			BorderPane.setCenter(taReport);//place image in center pane
 		}
 	}
@@ -215,8 +215,8 @@ public class Manager extends Application
 		d--;
 		if (d<0) d=6;
 
-		VBoxGraph.getChildren().clear();
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
+		VBoxGraph.getChildren().clear();//clear VBox
+		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);//reload VBox
 	}//end of method Left
 
 	public void Right(DataPlot Plots[])
@@ -246,22 +246,30 @@ public class Manager extends Application
 		try {saveImage(imageURL, destinationFile);}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
 		{
-			System.out.println("Something went wrong with the file I/O!");//error notification message
+			System.out.println("Something went wrong with the file I/O!");//error message
 			e1.printStackTrace();
 		}
-		
+
 		return destinationFile;//return image location
 	}//end of method ImagePull
 
-
+	
+	/*****************************************************************/
+	/* Copyright 2013 Code Strategies                                */
+	/* This code may be freely used and distributed in any project.  */
+	/* However, please do not remove this credit if you publish this */
+	/* code in paper or electronic form, such as on a web site.      */
+	/*****************************************************************/
+	//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
 	public static void saveImage(String imageURL, String destinationFile) throws IOException
 	{
+		int length;
 		URL url=new URL(imageURL);
 		InputStream is=url.openStream();
 		OutputStream os=new FileOutputStream(destinationFile);
 
 		byte[] b=new byte[2048];
-		int length;
+		
 
 		while ((length=is.read(b))!=-1) os.write(b, 0, length);
 
