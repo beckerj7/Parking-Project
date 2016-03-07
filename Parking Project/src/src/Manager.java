@@ -147,9 +147,9 @@ public class Manager extends Application
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
-		btRefresh.setOnAction(e->Refresh());
-		btLeft.setOnAction(e->Left(Plots));
-		btRight.setOnAction(e->Right(Plots));
+		btRefresh.setOnAction(e->Refresh());//refresh button listener
+		btLeft.setOnAction(e->Left(Plots));//cycle graph left button listener
+		btRight.setOnAction(e->Right(Plots));//cycle graph right button listener
 	}//end of method start
 
 	public void Refresh()
@@ -159,7 +159,6 @@ public class Manager extends Application
 		try 
 		{
 			imageLocation=ImagePull();
-			System.out.println(imageLocation);
 			Date DandT = new Date( );
 			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");
 			String sDate = DayOfWeek.format(DandT);
