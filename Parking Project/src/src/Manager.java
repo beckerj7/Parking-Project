@@ -237,16 +237,6 @@ public class Manager extends Application
 	}//end of method Right
 
 
-	/*****************************************************************/
-	/* Copyright 2013 Code Strategies                                */
-	/* This code may be freely used and distributed in any project.  */
-	/* However, please do not remove this credit if you publish this */
-	/* code in paper or electronic form, such as on a web site.      */
-	/*****************************************************************/
-	/**Pulls the current image from the online video stream and saves it to local memory
-	 * @return
-	 * @throws Exception
-	 */
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
@@ -264,6 +254,12 @@ public class Manager extends Application
 
 		try
 		{
+			/*****************************************************************/
+			/* Copyright 2013 Code Strategies                                */
+			/* This code may be freely used and distributed in any project.  */
+			/* However, please do not remove this credit if you publish this */
+			/* code in paper or electronic form, such as on a web site.      */
+			/*****************************************************************/
 			int length;
 			URL url=new URL(imageURL); //object for image url
 			InputStream is=url.openStream();
