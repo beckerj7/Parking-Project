@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 //ERROR WITH CODE: will display available spots of image with the most avilable spots, eg image 1 has to be a full parking lot image
 
 public class highlight {
+	public static int availableSpts;	//declare available spots 
+	public static int takenSpts;		//declare taken spots
+
 	public static void main(String[] args) throws IOException {
 	
 	BufferedImage img1 = ImageIO.read(new File("image1.jpg")); // full parking lot

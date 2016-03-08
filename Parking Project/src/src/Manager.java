@@ -27,8 +27,8 @@ public class Manager extends Application
 	Scene Scene;
 
 	int d;//numerical day indicator
-	int spots = display.spotsAvailable; //value grabbed from display class
-	int taken = display.spotsTaken; //value grabbed from display class
+	int spots = highlight.availableSpts; //value grabbed from display class
+	int taken = highlight.takenSpts; //value grabbed from display class
 
 	HBox HBoxBt;//HBox for buttons
 	VBox VBoxGraph;//VBox for graph
