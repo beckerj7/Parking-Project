@@ -32,7 +32,7 @@ public class Manager extends Application
 
 	HBox HBoxBt;//HBox for buttons
 	VBox VBoxGraph;//VBox for graph
-	VBox VBoxDisplay;//
+	VBox VBoxDisplay;//Vbox for data display
 
 	String imageLocation; //string for image location on disk
 
@@ -43,8 +43,8 @@ public class Manager extends Application
 	Image Image;
 	ImageView ImageView=new ImageView(Image); //node to display image
 
-	TextArea taReport;
-	TextArea taDisplay;
+	TextArea taReport;//error reporting text area
+	TextArea taDisplay;//user data display text area
 
 	public static void main(String args[])
 	{
@@ -62,7 +62,7 @@ public class Manager extends Application
 		DataPlot[] Plots=new DataPlot[7];
 		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots Available");
 
-		//GUI assembly
+		//GUI element creation
 		BorderPane=new BorderPane();
 
 		Button btLeft=new Button("<---");
@@ -73,7 +73,7 @@ public class Manager extends Application
 		VBoxGraph=new VBox();
 		VBoxDisplay=new VBox();
 
-		taDisplay=new TextArea();//text area creation/formatting
+		taDisplay=new TextArea();
 		taDisplay.setEditable(false);
 
 		taReport=new TextArea();
@@ -130,6 +130,7 @@ public class Manager extends Application
 			e.printStackTrace();
 		}
 
+		//GUI assembly
 		try
 		{
 			ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
@@ -144,16 +145,17 @@ public class Manager extends Application
 		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
 		BorderPane.setLeft(VBoxDisplay);//place text area in left pane
 
-		Scene=new Scene(BorderPane);//lights!
-		Stage.setScene(Scene);//camera!
-		Stage.show();//action!
 		btRefresh.setOnAction(e->Refresh());//refresh button listener
 		btLeft.setOnAction(e->Left(Plots));//cycle graph left button listener
 		btRight.setOnAction(e->Right(Plots));//cycle graph right button listener
+		
+		Scene=new Scene(BorderPane);//lights!
+		Stage.setScene(Scene);//camera!
+		Stage.show();//action!
 	}//end of method start
 
-	
-	
+
+
 	public void Refresh()//update to current camera image
 	{
 		int i;
@@ -211,8 +213,8 @@ public class Manager extends Application
 			BorderPane.setCenter(taReport);//place image in center pane
 		}
 	}//end of method Refresh
-	
-	
+
+
 
 	public void Left(DataPlot Plots[])
 	{
@@ -223,8 +225,8 @@ public class Manager extends Application
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);//reload VBox
 	}//end of method Left
 
-	
-	
+
+
 	public void Right(DataPlot Plots[])
 	{
 		d++;
@@ -234,8 +236,8 @@ public class Manager extends Application
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
 	}//end of method Right
 
-	
-	
+
+
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
@@ -261,7 +263,7 @@ public class Manager extends Application
 		return destinationFile;//return image location
 	}//end of method ImagePull
 
-	
+
 
 	/*****************************************************************/
 	/* Copyright 2013 Code Strategies                                */
