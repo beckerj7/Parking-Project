@@ -31,8 +31,9 @@ public class Manager extends Application
 	int taken = highlight.takenSpts; //value grabbed from display class
 
 	HBox HBoxBt;//HBox for buttons
+	HBox HBoxPics;//HBox for pictures
 	VBox VBoxGraph;//VBox for graph
-	VBox VBoxDisplay;//Vbox for data display
+	VBox VBoxDisplay;//VBox for data display
 
 	String imageLocation; //string for image location on disk
 
@@ -68,6 +69,7 @@ public class Manager extends Application
 		Button btRefresh=new Button("Refresh");
 
 		HBoxBt=new HBox();
+		HBoxPics=new HBox();
 		VBoxGraph=new VBox();
 		VBoxDisplay=new VBox();
 
@@ -146,7 +148,7 @@ public class Manager extends Application
 		btRefresh.setOnAction(e->Refresh());//refresh button listener
 		btLeft.setOnAction(e->Left(Plots));//cycle graph left button listener
 		btRight.setOnAction(e->Right(Plots));//cycle graph right button listener
-		
+
 		Scene=new Scene(BorderPane);//lights!
 		Stage.setScene(Scene);//camera!
 		Stage.show();//action!
@@ -235,7 +237,16 @@ public class Manager extends Application
 	}//end of method Right
 
 
-
+	/*****************************************************************/
+	/* Copyright 2013 Code Strategies                                */
+	/* This code may be freely used and distributed in any project.  */
+	/* However, please do not remove this credit if you publish this */
+	/* code in paper or electronic form, such as on a web site.      */
+	/*****************************************************************/
+	/**Pulls the current image from the online video stream and saves it to local memory
+	 * @return
+	 * @throws Exception
+	 */
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
@@ -251,7 +262,20 @@ public class Manager extends Application
 
 		String destinationFile="image" + i + ".jpg";//set image destination
 
-		try {saveImage(imageURL, destinationFile);}//download and save image
+		try
+		{
+			int length;
+			URL url=new URL(imageURL); //object for image url
+			InputStream is=url.openStream();
+			OutputStream os=new FileOutputStream(destinationFile); //object for image destination
+
+			byte[] b=new byte[2048];
+
+			while ((length=is.read(b))!=-1) os.write(b, 0, length);
+
+			is.close();
+			os.close();
+		}//download and save image
 		catch (IOException e1)//catch file I/O exceptions
 		{
 			System.out.println("Something went wrong with the file I/O!");//error message
@@ -260,28 +284,5 @@ public class Manager extends Application
 
 		return destinationFile;//return image location
 	}//end of method ImagePull
-
-
-
-	/*****************************************************************/
-	/* Copyright 2013 Code Strategies                                */
-	/* This code may be freely used and distributed in any project.  */
-	/* However, please do not remove this credit if you publish this */
-	/* code in paper or electronic form, such as on a web site.      */
-	/*****************************************************************/
-	public static void saveImage(String imageURL, String destinationFile) throws IOException
-	{
-		int length;
-		URL url=new URL(imageURL); //object for image url
-		InputStream is=url.openStream();
-		OutputStream os=new FileOutputStream(destinationFile); //object for image destination
-
-		byte[] b=new byte[2048];
-
-		while ((length=is.read(b))!=-1) os.write(b, 0, length);
-
-		is.close();
-		os.close();
-	}//end of method SaveImage
 	//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
 }//end of class Manager
