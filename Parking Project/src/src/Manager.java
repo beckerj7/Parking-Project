@@ -152,6 +152,8 @@ public class Manager extends Application
 		btRight.setOnAction(e->Right(Plots));//cycle graph right button listener
 	}//end of method start
 
+	
+	
 	public void Refresh()//update to current camera image
 	{
 		int i;
@@ -208,7 +210,9 @@ public class Manager extends Application
 			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");//error message
 			BorderPane.setCenter(taReport);//place image in center pane
 		}
-	}
+	}//end of method Refresh
+	
+	
 
 	public void Left(DataPlot Plots[])
 	{
@@ -219,6 +223,8 @@ public class Manager extends Application
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);//reload VBox
 	}//end of method Left
 
+	
+	
 	public void Right(DataPlot Plots[])
 	{
 		d++;
@@ -228,6 +234,8 @@ public class Manager extends Application
 		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
 	}//end of method Right
 
+	
+	
 	public static String ImagePull() throws Exception
 	{
 		int i=0;//counter variable
@@ -254,13 +262,13 @@ public class Manager extends Application
 	}//end of method ImagePull
 
 	
+
 	/*****************************************************************/
 	/* Copyright 2013 Code Strategies                                */
 	/* This code may be freely used and distributed in any project.  */
 	/* However, please do not remove this credit if you publish this */
 	/* code in paper or electronic form, such as on a web site.      */
 	/*****************************************************************/
-	//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
 	public static void saveImage(String imageURL, String destinationFile) throws IOException
 	{
 		int length;
@@ -269,11 +277,11 @@ public class Manager extends Application
 		OutputStream os=new FileOutputStream(destinationFile);
 
 		byte[] b=new byte[2048];
-		
 
 		while ((length=is.read(b))!=-1) os.write(b, 0, length);
 
 		is.close();
 		os.close();
 	}//end of method SaveImage
+	//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
 }//end of class Manager
