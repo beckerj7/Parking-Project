@@ -34,14 +34,14 @@ public class Manager extends Application
 	VBox VBoxGraph;//VBox for graph
 	VBox VBoxDisplay;//
 
-	String imageLocation; //string for image
+	String imageLocation; //string for image location on disk
 
 	Text txtSpots;
 
-	DataPlot DataPlot=new DataPlot("Time", "Spots");
+	DataPlot DataPlot;
 
-	Image Image; 
-	ImageView ImageView=new ImageView(Image); //new object for image
+	Image Image;
+	ImageView ImageView=new ImageView(Image); //node to display image
 
 	TextArea taReport;
 	TextArea taDisplay;
@@ -60,7 +60,7 @@ public class Manager extends Application
 	{
 		int i;
 		DataPlot[] Plots=new DataPlot[7];
-		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots");
+		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots Available");
 
 		//GUI assembly
 		BorderPane=new BorderPane();
