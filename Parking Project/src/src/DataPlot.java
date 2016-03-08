@@ -33,11 +33,12 @@ public class DataPlot extends LineChart<String,Number>
 
 		try
 		{
-			File file=new File("Day" + i + " Dummy.txt");
-			FileReader inputFile=new FileReader(file);
+			File file=new File("Day" + i + " Dummy.txt"); //Takes in the hard coded data from over a weeks analysis
+			FileReader inputFile=new FileReader(file); //reads the data for the graph
 			BufferedReader in=new BufferedReader(inputFile);
 			line=in.readLine();//read line form file
 
+			//loops through the data in order to create the official graph
 			for (j=0; j<96; j++)
 			{
 				Hist[i][j]=Integer.parseInt(line);//cast line to integer and save to array
@@ -51,6 +52,7 @@ public class DataPlot extends LineChart<String,Number>
 			IOE.printStackTrace();
 		}
 		
+		//Logic for identifying the data for the day of the week
 		if (i==0) day="Sunday";
 		if (i==1) day="Monday";
 		if (i==2) day="Tuesday";
@@ -62,7 +64,7 @@ public class DataPlot extends LineChart<String,Number>
 		setTitle(day);//set the title
 		javafx.scene.chart.XYChart.Series<String, Number> series=new XYChart.Series<String, Number>();//create new plot
 
-		try//plot each datapoint 
+		try//plot each datapoint from the data files
 		{
 			k=0;
 			
