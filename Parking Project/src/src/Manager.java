@@ -272,9 +272,9 @@ public class Manager extends Application
 	public static void saveImage(String imageURL, String destinationFile) throws IOException
 	{
 		int length;
-		URL url=new URL(imageURL);
+		URL url=new URL(imageURL); //object for image url
 		InputStream is=url.openStream();
-		OutputStream os=new FileOutputStream(destinationFile);
+		OutputStream os=new FileOutputStream(destinationFile); //object for image destination
 
 		byte[] b=new byte[2048];
 
