@@ -34,14 +34,14 @@ public class Manager extends Application
 	VBox VBoxGraph;//VBox for graph
 	VBox VBoxDisplay;//
 
-	String imageLocation;
+	String imageLocation; //string for image
 
 	Text txtSpots;
 
 	DataPlot DataPlot=new DataPlot("Time", "Spots");
 
-	Image Image;
-	ImageView ImageView=new ImageView(Image);
+	Image Image; 
+	ImageView ImageView=new ImageView(Image); //new object for image
 
 	TextArea taReport;
 	TextArea taDisplay;
@@ -241,7 +241,7 @@ public class Manager extends Application
 		int i=0;//counter variable
 		boolean check;//file existence variable
 
-		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg";
+		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg"; //url where image will be taken from
 
 		do//avoid overwriting existing images
 		{
