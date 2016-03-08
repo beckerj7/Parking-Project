@@ -132,7 +132,7 @@ public class Manager extends Application
 
 		try
 		{
-			ImageView=new ImageView(new Image(imageLocation));
+			ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
 			BorderPane.setCenter(ImageView);//place image in center pane
 		}
 		catch (Exception E)
@@ -201,7 +201,7 @@ public class Manager extends Application
 		}
 		try
 		{
-			ImageView=new ImageView(new Image(imageLocation));
+			ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
 			BorderPane.setCenter(ImageView);//place image in center pane
 		}
 		catch (Exception E)
