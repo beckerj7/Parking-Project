@@ -33,21 +33,21 @@ public class DataPlot extends LineChart<String,Number>
 
 		try
 		{
-			File fil=new File("Day" + i + " Dummy.txt");
-			FileReader inputFil=new FileReader(fil);
-			BufferedReader in=new BufferedReader(inputFil);
-			line=in.readLine();
+			File file=new File("Day" + i + " Dummy.txt");
+			FileReader inputFile=new FileReader(file);
+			BufferedReader in=new BufferedReader(inputFile);
+			line=in.readLine();//read line form file
 
 			for (j=0; j<96; j++)
 			{
-				Hist[i][j]=Integer.parseInt(line); //this is line 19
+				Hist[i][j]=Integer.parseInt(line);//cast line to integer and save to array
 				line=in.readLine();			
 			}
-			in.close();
+			in.close();//close reader
 		}
 		catch (IOException IOE)
 		{
-			System.out.println("Something is wrong with the dataplot file I/O!");
+			System.out.println("Something is wrong with the dataplot file I/O!");//error message
 			IOE.printStackTrace();
 		}
 		
