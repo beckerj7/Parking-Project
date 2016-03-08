@@ -36,11 +36,7 @@ public class Manager extends Application
 
 	String imageLocation; //string for image location on disk
 
-	Text txtSpots;
-
-	DataPlot DataPlot;
-
-	Image Image;
+	Image Image; //creates image for ImageView
 	ImageView ImageView=new ImageView(Image); //node to display image
 
 	TextArea taReport;//error reporting text area
@@ -58,6 +54,7 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
+		//starts creating the graph being displayed tot the user for the days of the week
 		int i;
 		DataPlot[] Plots=new DataPlot[7];
 		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots Available");
@@ -65,6 +62,7 @@ public class Manager extends Application
 		//GUI element creation
 		BorderPane=new BorderPane();
 
+		//Buttons being used for shift through graphs and refreshing the GUI
 		Button btLeft=new Button("<---");
 		Button btRight=new Button("--->");
 		Button btRefresh=new Button("Refresh");
@@ -119,7 +117,7 @@ public class Manager extends Application
 			}
 			VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
 		}
-		catch (IOException IOE)
+		catch (IOException IOE)// Catching errors that may occur with the file I/O
 		{
 			System.out.println("Something is wrong with the file I/O!");
 			IOE.printStackTrace();
