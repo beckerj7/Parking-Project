@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -29,10 +30,11 @@ public class DataPlotTest extends LineChart<String,Number>
 	 * @param i
 	 * @param ManagerTest
 	 */
-	public void Plot(int ref, ManagerTest ManagerTest)
+	public void Plot(int h, int m, int ref, ManagerTest ManagerTest)
 	{
 		int i=0;
 		int k;
+		int iTime=0;
 		int[] Hist=new int[672];
 		String line;
 		String day=null;
@@ -75,19 +77,30 @@ public class DataPlotTest extends LineChart<String,Number>
 		try//plot each datapoint from the data files
 		{
 			k=0;
+			iTime=m-30;
+			if (iTime<0) iTime+=60;
+			if (iTime<15) iTime=0;
+			else if (iTime<30) iTime=15;
+			else if (iTime<45) iTime=30;
+			else if (iTime<60) iTime=45;
+			iTime+=h*100;
 
-			for (i=(ref-2); i<(ref+6); i++)
+			for (i=(ref-2); i<(ref+7); i++)
 			{
 				k++;
 
-				time=String.valueOf(Integer.parseInt(time)+15);
+				iTime+=15;
+				
 				if (k==4)
 				{
 					k=0;
-					time=String.valueOf(Integer.parseInt(time)+40);
+					iTime+=40;
 				}
-				if (Integer.parseInt(time)<100) head="00";
-				else if (Integer.parseInt(time)<1000) head="0";
+				
+				time=String.valueOf(iTime);
+				
+				if (iTime<100) head="00";
+				else if (iTime<1000) head="0";
 				else head="";
 
 				series.getData().add(new XYChart.Data<String, Number>(head + time, Hist[i]));

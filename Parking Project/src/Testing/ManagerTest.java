@@ -121,7 +121,7 @@ public class ManagerTest extends Application
 				ref=d*96+iHour*4+iMinute/15;
 				System.out.println("Ref:\t" + ref);
 
-				Plot.Plot(ref, this);//create test dataplot for GUI
+				Plot.Plot(iHour, iMinute, ref, this);//create test dataplot for GUI
 				VBoxGraph.getChildren().addAll(HBoxBt, Plot);
 			}
 			catch (IOException IOE)// Catching errors that may occur with the file I/O
