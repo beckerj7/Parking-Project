@@ -30,7 +30,7 @@ public class DataPlotTest extends LineChart<String,Number>
 	 * @param i
 	 * @param ManagerTest
 	 */
-	public void Plot(int h, int m, int ref, ManagerTest ManagerTest)
+	public void Plot(int d, int h, int m, int ref, ManagerTest ManagerTest)
 	{
 		int i=0;
 		int k;
@@ -39,7 +39,8 @@ public class DataPlotTest extends LineChart<String,Number>
 		String line;
 		String day=null;
 		String time="0";
-		String head;
+		String head1;
+		String head2;
 
 		try
 		{
@@ -76,34 +77,41 @@ public class DataPlotTest extends LineChart<String,Number>
 
 		try//plot each datapoint from the data files
 		{
-			k=0;
-			iTime=m-30;
-			if (iTime<0) iTime+=60;
-			if (iTime<15) iTime=0;
-			else if (iTime<30) iTime=15;
-			else if (iTime<45) iTime=30;
-			else if (iTime<60) iTime=45;
-			k=iTime/15;
-			iTime+=h*100;
-
+			m-=30;
+			if (m<0)
+			{
+				m+=60;
+				h--;
+			}
+			if (m<15) m=0;
+			else if (m<30) m=15;
+			else if (m<45) m=30;
+			else if (m<60) m=45;
+			
 			for (i=(ref-2); i<(ref+7); i++)
 			{
-				iTime+=15;
-				k++;
-				
-				if (k==4)
+				if (m==60)
 				{
-					k-=4;
-					iTime+=40;
+					m=0;
+					h++;
+					if (h==24)
+					{
+						h=0;
+						d++;
+						if (d>6) d=0;
+					}
 				}
-
-				time=String.valueOf(iTime);
 				
-				if (iTime<100) head="00";
-				else if (iTime<1000) head="0";
-				else head="";
+				
+				time=String.valueOf(h*100+m);
+				
+				if (h==0) head1="00";
+				else if (h<10) head1="0";
+				else head1="";
+//				System.out.println(iTime);
 
-				series.getData().add(new XYChart.Data<String, Number>(head + time, Hist[i]));
+				series.getData().add(new XYChart.Data<String, Number>(head1 + time, Hist[i]));
+				m+=15;
 			}
 		}
 		catch (Exception e)
