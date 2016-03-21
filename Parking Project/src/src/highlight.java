@@ -18,7 +18,7 @@ public class highlight {
 	public static void main(String[] args) throws IOException {
 
 		BufferedImage img1 = ImageIO.read(new File("image1.jpg")); // full parking lot
-		BufferedImage img2 = ImageIO.read(new File("image2.jpg")); //current time parking lot
+		BufferedImage img2 = ImageIO.read(new File("image3.jpg")); //current time parking lot
 		int width1 = img1.getWidth(); // Change - getWidth() and getHeight() for BufferedImage
 		int width2 = img2.getWidth(); // take no arguments
 		int height1 = img1.getHeight();
@@ -54,7 +54,6 @@ public class highlight {
 				result = (diff >> 16) | (diff << 8) | diff;
 				outImg.setRGB(j, i, result); // Set result
 			}
-
 		}
 		//Display current time image (image 2)
 		JFrame frame = new JFrame();

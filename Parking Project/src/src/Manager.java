@@ -271,7 +271,7 @@ public class Manager extends Application
 
 			is.close();
 			os.close();
-		}//download and save image
+		}//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
 		catch (IOException e1)//catch file I/O exceptions
 		{
 			System.out.println("Something went wrong with the file I/O!");//error message
@@ -280,5 +280,4 @@ public class Manager extends Application
 
 		return destinationFile;//return image location
 	}//end of method ImagePull
-	//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
 }//end of class Manager
