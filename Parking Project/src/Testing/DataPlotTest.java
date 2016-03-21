@@ -83,20 +83,20 @@ public class DataPlotTest extends LineChart<String,Number>
 			else if (iTime<30) iTime=15;
 			else if (iTime<45) iTime=30;
 			else if (iTime<60) iTime=45;
+			k=iTime/15;
 			iTime+=h*100;
 
 			for (i=(ref-2); i<(ref+7); i++)
 			{
-				k++;
-
 				iTime+=15;
+				k++;
 				
 				if (k==4)
 				{
-					k=0;
+					k-=4;
 					iTime+=40;
 				}
-				
+
 				time=String.valueOf(iTime);
 				
 				if (iTime<100) head="00";

@@ -31,6 +31,15 @@ public class ManagerTest extends Application
 	int ref=0;
 	int spots = highlight.availableSpts; //value grabbed from display class
 	int taken = highlight.takenSpts; //value grabbed from display class
+	int iHour;
+	int iMinute;
+	Date DandT;
+	String sDate;
+	String sHour;
+	String sMinute;
+	SimpleDateFormat DayOfWeek;
+	SimpleDateFormat Hour;
+	SimpleDateFormat Minute;
 
 	HBox HBoxBt;//HBox for buttons
 	HBox HBoxPics;//HBox for pictures
@@ -60,6 +69,7 @@ public class ManagerTest extends Application
 		try
 		{//starts creating the graph being displayed to the user for the days of the week
 			int i;
+			
 			DataPlotTest Plot=new DataPlotTest("Time", "Spots Available");
 
 			//GUI element creation
@@ -89,17 +99,17 @@ public class ManagerTest extends Application
 			try
 			{
 				imageLocation=ImagePull();//download image to local storage
-				Date DandT = new Date( );
-				SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
-				String sDate = DayOfWeek.format(DandT);//cast to string
-				SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
-				String sHour = Hour.format(DandT);//cast to string
-				SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
-				String sMinute = Minute.format(DandT);//cast to string
+				DandT = new Date( );
+				DayOfWeek = new SimpleDateFormat ("E");//acquire day
+				sDate = DayOfWeek.format(DandT);//cast to string
+				Hour = new SimpleDateFormat ("kk");//acquire hour
+				sHour = Hour.format(DandT);//cast to string
+				Minute = new SimpleDateFormat ("mm");//acquire minute
+				sMinute = Minute.format(DandT);//cast to string
 				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
 
-				int iHour=Integer.parseInt(sHour);
-				int iMinute=Integer.parseInt(sMinute);
+				iHour=Integer.parseInt(sHour);
+				iMinute=Integer.parseInt(sMinute);
 
 				switch (sDate){//cast day to a representative number
 				case "Sun": d = 0;
@@ -231,9 +241,22 @@ public class ManagerTest extends Application
 		ref--;
 		if (ref<0) ref=671;
 
+		iMinute-=15;
+		if (iMinute<0)
+		{
+			iMinute+=60;
+			iHour--;
+			if (iHour<0)
+			{
+				iHour=23;
+				d--;
+				if (d<0) d=6;
+			}
+		}
+		System.out.println("Hour: " + iHour + " Minute: " + iMinute);
+		
 		VBoxGraph.getChildren().clear();//clear VBox
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
-		System.out.println("Left Complete");
 	}//end of method Left
 
 
@@ -242,10 +265,23 @@ public class ManagerTest extends Application
 	{
 		ref++;
 		if (ref>671) ref=0;
-
+		
+		iMinute+=15;
+		if (iMinute>59)
+		{
+			iMinute-=60;
+			iHour++;
+			if (iHour>23)
+			{
+				iHour=0;
+				d++;
+				if (d>6) d=0;
+			}
+		}
+		System.out.println("Hour: " + iHour + " Minute: " + iMinute);
+		
 		VBoxGraph.getChildren().clear();
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);
-		System.out.println("Right Complete");
 	}//end of method Right
 
 
