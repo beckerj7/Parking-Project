@@ -1,4 +1,4 @@
-package src;
+package Testing;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,19 +9,19 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
-public class DataPlot extends LineChart<String,Number>
+public class DataPlotTest extends LineChart<String,Number>
 {
 	/**
 	 * @param PlotX
 	 * @param PlotY
 	 */
-	public DataPlot(String PlotX, String PlotY)
+	public DataPlotTest(String PlotX, String PlotY)
 	{
 		super(new CategoryAxis(), new NumberAxis());
-        this.getXAxis().setLabel(PlotX);//label x-axis
+		this.getXAxis().setLabel(PlotX);//label x-axis
 		this.getYAxis().setLabel(PlotY);//label y-axis
-		
-        setLegendVisible(false);
+
+		setLegendVisible(false);
 	}//end of method DataPlotTest
 
 
@@ -29,11 +29,11 @@ public class DataPlot extends LineChart<String,Number>
 	 * @param i
 	 * @param ManagerTest
 	 */
-	public void Plot(int i, Manager Manager)
+	public void Plot(int ref, ManagerTest ManagerTest)
 	{
-		int j;
+		int i=0;
 		int k;
-		int[][] Hist=new int[7][96];
+		int[] Hist=new int[672];
 		String line;
 		String day=null;
 		String time="0";
@@ -41,15 +41,15 @@ public class DataPlot extends LineChart<String,Number>
 
 		try
 		{
-			File file=new File("Day" + i + " Dummy.txt"); //Takes in the hard coded data from over a weeks analysis
+			File file=new File("Dummy.txt"); //Takes in the hard coded data from over a weeks analysis
 			FileReader inputFile=new FileReader(file); //reads the data for the graph
 			BufferedReader in=new BufferedReader(inputFile);
 			line=in.readLine();//read line form file
 
 			//loops through the data in order to create the official graph
-			for (j=0; j<96; j++)
+			for (i=0; i<672; i++)
 			{
-				Hist[i][j]=Integer.parseInt(line);//cast line to integer and save to array
+				Hist[i]=Integer.parseInt(line);//cast line to integer and save to array
 				line=in.readLine();			
 			}
 			in.close();//close reader
@@ -59,7 +59,7 @@ public class DataPlot extends LineChart<String,Number>
 			System.out.println("Something is wrong with the dataplot file I/O!");//error message
 			IOE.printStackTrace();
 		}
-		
+
 		//Logic for identifying the data for the day of the week
 		if (i==0) day="Sunday";
 		if (i==1) day="Monday";
@@ -68,18 +68,18 @@ public class DataPlot extends LineChart<String,Number>
 		if (i==4) day="Thursday";
 		if (i==5) day="Friday";
 		if (i==6) day="Saturday";
-		
+
 		setTitle(day);//set the title
 		javafx.scene.chart.XYChart.Series<String, Number> series=new XYChart.Series<String, Number>();//create new plot
 
 		try//plot each datapoint from the data files
 		{
 			k=0;
-			
-			for (j=0; j<96; j++)
+
+			for (i=(ref-2); i<(ref+6); i++)
 			{
 				k++;
-				
+
 				time=String.valueOf(Integer.parseInt(time)+15);
 				if (k==4)
 				{
@@ -89,11 +89,15 @@ public class DataPlot extends LineChart<String,Number>
 				if (Integer.parseInt(time)<100) head="00";
 				else if (Integer.parseInt(time)<1000) head="0";
 				else head="";
-				
-				series.getData().add(new XYChart.Data<String, Number>(head + time, Hist[i][j]));
+
+				series.getData().add(new XYChart.Data<String, Number>(head + time, Hist[i]));
 			}
 		}
-		catch (Exception e) {Manager.taDisplay.appendText("\nSomething went wrong with the dataplot!");}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			ManagerTest.taDisplay.appendText("\nSomething went wrong with the dataplot!");
+		}
 
 		getData().add(series);
 	}//end of method Plot

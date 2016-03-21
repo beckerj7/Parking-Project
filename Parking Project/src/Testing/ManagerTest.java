@@ -1,4 +1,4 @@
-package src;
+package Testing;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,13 +21,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Manager extends Application
+public class ManagerTest extends Application
 {	
 	//create GUI elements
 	BorderPane BorderPane;
 	Scene Scene;
 
 	int d;//numerical day indicator
+	int ref=0;
 	int spots = highlight.availableSpts; //value grabbed from display class
 	int taken = highlight.takenSpts; //value grabbed from display class
 
@@ -45,7 +47,7 @@ public class Manager extends Application
 
 	public static void main(String args[])
 	{
-		Manager.launch(args);//activate GUI(?)
+		ManagerTest.launch(args);//activate GUI(?)
 	}//end of main method
 
 
@@ -55,103 +57,111 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
-		//starts creating the graph being displayed tot the user for the days of the week
-		int i;
-		DataPlot[] Plots=new DataPlot[7];
-		for (i=0; i<7; i++) Plots[i]=new DataPlot("Time", "Spots Available");
-
-		//GUI element creation
-		BorderPane=new BorderPane();
-
-		//Buttons being used for shift through graphs and refreshing the GUI
-		Button btLeft=new Button("<---");
-		Button btRight=new Button("--->");
-		Button btRefresh=new Button("Refresh");
-
-		HBoxBt=new HBox();
-		HBoxPics=new HBox();
-		VBoxGraph=new VBox();
-		VBoxDisplay=new VBox();
-
-		taDisplay=new TextArea();
-		taDisplay.setEditable(false);
-
-		taReport=new TextArea();
-		taReport.setEditable(false);
-
-		ImageView.setFitWidth(800);//imageView formatting
-		ImageView.setPreserveRatio(true);
-
-		taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
-
-		for (i=0; i<7; i++) Plots[i].Plot(i, this);//create test dataplot for GUI
-		HBoxBt.getChildren().addAll(btLeft, btRight);//add buttons to HBox
-		VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
-
 		try
-		{
-			imageLocation=ImagePull();//download image to local storage
-			Date DandT = new Date( );
-			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
-			String sDate = DayOfWeek.format(DandT);//cast to string
-			SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
-			String sHour = Hour.format(DandT);//cast to string
-			SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
-			String sMinute = Minute.format(DandT);//cast to string
-			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+		{//starts creating the graph being displayed to the user for the days of the week
+			int i;
+			DataPlotTest Plot=new DataPlotTest("Time", "Spots Available");
 
-			switch (sDate){//cast day to a representative number
-			case "Sun": d = 0;
-			break;
-			case "Mon": d = 1;
-			break;
-			case "Tue": d = 2;
-			break;
-			case "Wed": d = 3;
-			break;
-			case "Thu": d = 4;
-			break;
-			case "Fri": d = 5;
-			break;
-			case "Sat": d = 6;
-			break;
-			default: System.out.println("Something went wrong with the switch statement!");
+			//GUI element creation
+			BorderPane=new BorderPane();
+
+			//Buttons being used for shift through graphs and refreshing the GUI
+			Button btLeft=new Button("<---");
+			Button btRight=new Button("--->");
+			Button btRefresh=new Button("Refresh");
+
+			HBoxBt=new HBox();
+			HBoxPics=new HBox();
+			VBoxGraph=new VBox();
+			VBoxDisplay=new VBox();
+
+			taDisplay=new TextArea();
+			taDisplay.setEditable(false);
+
+			taReport=new TextArea();
+			taReport.setEditable(false);
+
+			ImageView.setFitWidth(800);//imageView formatting
+			ImageView.setPreserveRatio(true);
+
+			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+
+			try
+			{
+				imageLocation=ImagePull();//download image to local storage
+				Date DandT = new Date( );
+				SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
+				String sDate = DayOfWeek.format(DandT);//cast to string
+				SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
+				String sHour = Hour.format(DandT);//cast to string
+				SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
+				String sMinute = Minute.format(DandT);//cast to string
+				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+
+				int iHour=Integer.parseInt(sHour);
+				int iMinute=Integer.parseInt(sMinute);
+
+				switch (sDate){//cast day to a representative number
+				case "Sun": d = 0;
+				break;
+				case "Mon": d = 1;
+				break;
+				case "Tue": d = 2;
+				break;
+				case "Wed": d = 3;
+				break;
+				case "Thu": d = 4;
+				break;
+				case "Fri": d = 5;
+				break;
+				case "Sat": d = 6;
+				break;
+				default: System.out.println("Something went wrong with the switch statement!");
+				}
+				ref=d*96+iHour*4+iMinute/15;
+				System.out.println("Ref:\t" + ref);
+
+				Plot.Plot(ref, this);//create test dataplot for GUI
+				VBoxGraph.getChildren().addAll(HBoxBt, Plot);
 			}
-			VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
-		}
-		catch (IOException IOE)// Catching errors that may occur with the file I/O
-		{
-			System.out.println("Something is wrong with the file I/O!");
-			IOE.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Something is wrong with the image pull and I don`t know what!");
-			e.printStackTrace();
-		}
+			catch (IOException IOE)// Catching errors that may occur with the file I/O
+			{
+				System.out.println("Something is wrong with the file I/O!");
+				IOE.printStackTrace();
+			}
+			catch (Exception e)
+			{
+				System.out.println("Something is wrong with the image pull and I don`t know what!");
+				e.printStackTrace();
+			}
 
-		//GUI assembly
-		try
-		{
-			ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
-			BorderPane.setCenter(ImageView);//place image in center pane
+			HBoxBt.getChildren().addAll(btLeft, btRight);//add buttons to HBox
+			VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
+
+			//GUI assembly
+			try
+			{
+				ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
+				BorderPane.setCenter(ImageView);//place image in center pane
+			}
+			catch (Exception E)
+			{
+				for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
+				BorderPane.setCenter(taReport);//place image in center pane
+			}
+
+			BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
+			BorderPane.setLeft(VBoxDisplay);//place text area in left pane
+
+			btRefresh.setOnAction(e->Refresh());//refresh button listener
+			btLeft.setOnAction(e->Left(Plot));//cycle graph left button listener
+			btRight.setOnAction(e->Right(Plot));//cycle graph right button listener
+
+			Scene=new Scene(BorderPane);//lights!
+			Stage.setScene(Scene);//camera!
+			Stage.show();//action!
 		}
-		catch (Exception E)
-		{
-			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
-			BorderPane.setCenter(taReport);//place image in center pane
-		}
-
-		BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
-		BorderPane.setLeft(VBoxDisplay);//place text area in left pane
-
-		btRefresh.setOnAction(e->Refresh());//refresh button listener
-		btLeft.setOnAction(e->Left(Plots));//cycle graph left button listener
-		btRight.setOnAction(e->Right(Plots));//cycle graph right button listener
-
-		Scene=new Scene(BorderPane);//lights!
-		Stage.setScene(Scene);//camera!
-		Stage.show();//action!
+		catch (Exception E) {E.printStackTrace();}
 	}//end of method start
 
 
@@ -216,24 +226,26 @@ public class Manager extends Application
 
 
 
-	public void Left(DataPlot Plots[])
+	public void Left(DataPlotTest Plot)
 	{
-		d--;
-		if (d<0) d=6;
+		ref--;
+		if (ref<0) ref=671;
 
 		VBoxGraph.getChildren().clear();//clear VBox
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);//reload VBox
+		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
+		System.out.println("Left Complete");
 	}//end of method Left
 
 
 
-	public void Right(DataPlot Plots[])
+	public void Right(DataPlotTest Plot)
 	{
-		d++;
-		if (d>6) d=0;
+		ref++;
+		if (ref>671) ref=0;
 
 		VBoxGraph.getChildren().clear();
-		VBoxGraph.getChildren().addAll(HBoxBt, Plots[d]);
+		VBoxGraph.getChildren().addAll(HBoxBt, Plot);
+		System.out.println("Right Complete");
 	}//end of method Right
 
 
