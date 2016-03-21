@@ -82,12 +82,18 @@ public class DataPlotTest extends LineChart<String,Number>
 			{
 				m+=60;
 				h--;
+				if (h<0)
+				{
+					h=23;
+					d--;
+					if (d<0) d=6;
+				}
 			}
 			if (m<15) m=0;
 			else if (m<30) m=15;
 			else if (m<45) m=30;
 			else if (m<60) m=45;
-			
+
 			for (i=(ref-2); i<(ref+7); i++)
 			{
 				if (m==60)
@@ -101,16 +107,17 @@ public class DataPlotTest extends LineChart<String,Number>
 						if (d>6) d=0;
 					}
 				}
-				
-				
-				time=String.valueOf(h*100+m);
-				
-				if (h==0) head1="00";
-				else if (h<10) head1="0";
-				else head1="";
-//				System.out.println(iTime);
 
-				series.getData().add(new XYChart.Data<String, Number>(head1 + time, Hist[i]));
+
+				time=String.valueOf(h*100+m);
+
+				if (m==0) head2="0";
+				else head2="";
+
+				if (h<10) head1="0";
+				else head1="";
+
+				series.getData().add(new XYChart.Data<String, Number>(head1 + h + ":" + head2 + m, Hist[i]));
 				m+=15;
 			}
 		}
