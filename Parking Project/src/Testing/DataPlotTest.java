@@ -137,13 +137,13 @@ public class DataPlotTest extends LineChart<String,Number>
 				}
 				
 				if (89<ref&&ref<98) setTitle("Sunday/Monday");//set the title
-				if (185<ref&&ref<194) setTitle("Monday/Tuesday");//set the title
-				if (281<ref&&ref<290) setTitle("Tuesday/Wednesday");//set the title
-				if (377<ref&&ref<386) setTitle("Wednesday/Thursday");//set the title
-				if (473<ref&&ref<482) setTitle("Thursday/Friday");//set the title
-				if (569<ref&&ref<578) setTitle("Friday/Saturday");//set the title
-				if (665<ref||ref<2) setTitle("Saturday/Sunday");//set the title
-				m+=15;
+				if (185<ref&&ref<194) setTitle("Monday/Tuesday");
+				if (281<ref&&ref<290) setTitle("Tuesday/Wednesday");
+				if (377<ref&&ref<386) setTitle("Wednesday/Thursday");
+				if (473<ref&&ref<482) setTitle("Thursday/Friday");
+				if (569<ref&&ref<578) setTitle("Friday/Saturday");
+				if (665<ref||ref<2) setTitle("Saturday/Sunday");
+				m+=15;//advance to the next datapoint
 			}
 		}
 		catch (Exception e)

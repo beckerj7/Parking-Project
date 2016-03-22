@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ManagerTest extends Application
@@ -69,7 +67,7 @@ public class ManagerTest extends Application
 		try
 		{//starts creating the graph being displayed to the user for the days of the week
 			int i;
-			
+
 			DataPlotTest Plot=new DataPlotTest("Time", "Spots Available");
 
 			//GUI element creation
@@ -106,10 +104,15 @@ public class ManagerTest extends Application
 				sHour = Hour.format(DandT);//cast to string
 				Minute = new SimpleDateFormat ("mm");//acquire minute
 				sMinute = Minute.format(DandT);//cast to string
-				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+				iHour=Integer.parseInt(sHour);//cast to integer
+				iMinute=Integer.parseInt(sMinute);//cast to integer
 
-				iHour=Integer.parseInt(sHour);
-				iMinute=Integer.parseInt(sMinute);
+				if (iHour==24)//preserve arithmetic logic
+				{
+					iHour=0;
+					sHour=String.valueOf(iHour);
+				}
+				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
 
 				switch (sDate){//cast day to a representative number
 				case "Sun": d = 0;
@@ -126,12 +129,10 @@ public class ManagerTest extends Application
 				break;
 				case "Sat": d = 6;
 				break;
-				default: System.out.println("Something went wrong with the switch statement!");
+				default: System.out.println("Something went wrong with the date switch statement!");
 				}
-				ref=d*96+iHour*4+iMinute/15;
-				System.out.println("Ref:\t" + ref);
 
-				Plot.Plot(iHour, iMinute, ref, this);//create test dataplot for GUI
+				Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
 				VBoxGraph.getChildren().addAll(HBoxBt, Plot);
 			}
 			catch (IOException IOE)// Catching errors that may occur with the file I/O
@@ -253,8 +254,9 @@ public class ManagerTest extends Application
 				if (d<0) d=6;
 			}
 		}
-		System.out.println("Hour: " + iHour + " Minute: " + iMinute);
-		
+		Plot=new DataPlotTest("Time", "Spots Available");
+		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+
 		VBoxGraph.getChildren().clear();//clear VBox
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
 	}//end of method Left
@@ -265,7 +267,7 @@ public class ManagerTest extends Application
 	{
 		ref++;
 		if (ref>671) ref=0;
-		
+
 		iMinute+=15;
 		if (iMinute>59)
 		{
@@ -278,8 +280,10 @@ public class ManagerTest extends Application
 				if (d>6) d=0;
 			}
 		}
-		System.out.println("Hour: " + iHour + " Minute: " + iMinute);
-		
+
+		Plot=new DataPlotTest("Time", "Spots Available");
+		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+
 		VBoxGraph.getChildren().clear();
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);
 	}//end of method Right
