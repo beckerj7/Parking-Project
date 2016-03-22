@@ -18,7 +18,7 @@ public class DataPlotTest extends LineChart<String,Number>
 	 */
 	public DataPlotTest(String PlotX, String PlotY)
 	{
-		super(new CategoryAxis(), new NumberAxis());
+		super(new CategoryAxis(), new NumberAxis(0, 24, 3));
 		this.getXAxis().setLabel(PlotX);//label x-axis
 		this.getYAxis().setLabel(PlotY);//label y-axis
 
@@ -30,20 +30,18 @@ public class DataPlotTest extends LineChart<String,Number>
 	 * @param i
 	 * @param ManagerTest
 	 */
-	public void Plot(int d, int h, int m, int ref, ManagerTest ManagerTest)
+	public void Plot(int d, int h, int m, ManagerTest ManagerTest)
 	{
 		int i=0;
-		int k;
-		int iTime=0;
+		int ref=d*96+h*4+m/15;
 		int[] Hist=new int[672];
 		String line;
 		String day=null;
-		String time="0";
 		String head1;
 		String head2;
 		boolean flag1=false;
 		boolean flag2=false;
-
+		
 		try
 		{
 			File file=new File("Dummy.txt"); //Takes in the hard coded data from over a weeks analysis
@@ -66,13 +64,13 @@ public class DataPlotTest extends LineChart<String,Number>
 		}
 
 		//Logic for identifying the data for the day of the week
-		if (i==0) day="Sunday";
-		if (i==1) day="Monday";
-		if (i==2) day="Tuesday";
-		if (i==3) day="Wednesday";
-		if (i==4) day="Thursday";
-		if (i==5) day="Friday";
-		if (i==6) day="Saturday";
+		if (d==0) day="Sunday";
+		if (d==1) day="Monday";
+		if (d==2) day="Tuesday";
+		if (d==3) day="Wednesday";
+		if (d==4) day="Thursday";
+		if (d==5) day="Friday";
+		if (d==6) day="Saturday";
 
 		setTitle(day);//set the title
 		javafx.scene.chart.XYChart.Series<String, Number> series=new XYChart.Series<String, Number>();//create new plot
@@ -109,9 +107,7 @@ public class DataPlotTest extends LineChart<String,Number>
 						if (d>6) d=0;
 					}
 				}
-
-				time=String.valueOf(h*100+m);
-
+				
 				if (m==0) head2="0";
 				else head2="";
 
@@ -128,7 +124,6 @@ public class DataPlotTest extends LineChart<String,Number>
 					i-=672;
 					flag2=true;
 				}
-				System.out.println(i);
 				series.getData().add(new XYChart.Data<String, Number>(head1 + h + ":" + head2 + m, Hist[i]));
 				if (flag1)//array looping/out-of-bounds prevention
 				{
@@ -140,7 +135,14 @@ public class DataPlotTest extends LineChart<String,Number>
 					i+=672;
 					flag2=false;
 				}
-				System.out.println(i);
+				
+				if (89<ref&&ref<98) setTitle("Sunday/Monday");//set the title
+				if (185<ref&&ref<194) setTitle("Monday/Tuesday");//set the title
+				if (281<ref&&ref<290) setTitle("Tuesday/Wednesday");//set the title
+				if (377<ref&&ref<386) setTitle("Wednesday/Thursday");//set the title
+				if (473<ref&&ref<482) setTitle("Thursday/Friday");//set the title
+				if (569<ref&&ref<578) setTitle("Friday/Saturday");//set the title
+				if (665<ref||ref<2) setTitle("Saturday/Sunday");//set the title
 				m+=15;
 			}
 		}
