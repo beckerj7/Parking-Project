@@ -41,6 +41,8 @@ public class DataPlotTest extends LineChart<String,Number>
 		String time="0";
 		String head1;
 		String head2;
+		boolean flag1=false;
+		boolean flag2=false;
 
 		try
 		{
@@ -108,7 +110,6 @@ public class DataPlotTest extends LineChart<String,Number>
 					}
 				}
 
-
 				time=String.valueOf(h*100+m);
 
 				if (m==0) head2="0";
@@ -117,7 +118,29 @@ public class DataPlotTest extends LineChart<String,Number>
 				if (h<10) head1="0";
 				else head1="";
 
+				if (i<0)//array looping/out-of-bounds prevention
+				{
+					i+=672;
+					flag1=true;
+				}
+				if (i>671)//array looping/out-of-bounds prevention
+				{
+					i-=672;
+					flag2=true;
+				}
+				System.out.println(i);
 				series.getData().add(new XYChart.Data<String, Number>(head1 + h + ":" + head2 + m, Hist[i]));
+				if (flag1)//array looping/out-of-bounds prevention
+				{
+					i-=672;
+					flag1=false;
+				}
+				if (flag2)//array looping/out-of-bounds prevention
+				{
+					i+=672;
+					flag2=false;
+				}
+				System.out.println(i);
 				m+=15;
 			}
 		}
