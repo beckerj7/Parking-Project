@@ -74,8 +74,10 @@ public class Manager extends Application
 			BorderPane=new BorderPane();
 
 			//Buttons being used for shift through graphs and refreshing the GUI
-			Button btLeft=new Button("<---");
-			Button btRight=new Button("--->");
+			Button btLeft=new Button("<");
+			Button btRight=new Button(">");
+			Button btDayPlus=new Button(">>");
+			Button btDayMinus=new Button("<<");
 			Button btRefresh=new Button("Refresh");
 
 			HBoxBt=new HBox();
@@ -146,7 +148,7 @@ public class Manager extends Application
 				e.printStackTrace();
 			}
 
-			HBoxBt.getChildren().addAll(btLeft, btRight);//add buttons to HBox
+			HBoxBt.getChildren().addAll(btDayMinus, btLeft, btRight, btDayPlus);//add buttons to HBox
 			VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
 
 			//GUI assembly
@@ -167,6 +169,8 @@ public class Manager extends Application
 			btRefresh.setOnAction(e->Refresh());//refresh button listener
 			btLeft.setOnAction(e->Left(Plot));//cycle graph left button listener
 			btRight.setOnAction(e->Right(Plot));//cycle graph right button listener
+			btDayPlus.setOnAction(e->Next(Plot));
+			btDayMinus.setOnAction(e->Previous(Plot));
 
 			Scene=new Scene(BorderPane);//lights!
 			Stage.setScene(Scene);//camera!
@@ -236,12 +240,35 @@ public class Manager extends Application
 	}//end of method Refresh
 
 
+	
+	public void Next(DataPlot Plot)
+	{
+		d++;
+		if (d>6) d=0;
+		Plot=new DataPlot("Time", "Spots Available");
+		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+
+		VBoxGraph.getChildren().clear();//clear VBox
+		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
+	}//end of method Next
+	
+	
+	
+	public void Previous(DataPlot Plot)
+	{
+		d--;
+		if (d<0) d=6;
+		Plot=new DataPlot("Time", "Spots Available");
+		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+
+		VBoxGraph.getChildren().clear();//clear VBox
+		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
+	}//end of method Previous
+	
+	
 
 	public void Left(DataPlot Plot)
 	{
-		ref--;
-		if (ref<0) ref=671;
-
 		iMinute-=15;
 		if (iMinute<0)
 		{
@@ -265,9 +292,6 @@ public class Manager extends Application
 
 	public void Right(DataPlot Plot)
 	{
-		ref++;
-		if (ref>671) ref=0;
-
 		iMinute+=15;
 		if (iMinute>59)
 		{
