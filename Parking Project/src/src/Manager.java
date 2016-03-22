@@ -199,7 +199,7 @@ public class Manager extends Application
 			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//add date and time to text area
 
-			switch (sDate){//cast day to representative number
+			switch (sDate){//cast day to a representative number
 			case "Sun": d = 0;
 			break;
 			case "Mon": d = 1;
@@ -235,12 +235,16 @@ public class Manager extends Application
 		{
 			taReport.clear();
 			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");//error message
+			
 			BorderPane.setCenter(taReport);//place image in center pane
 		}
 	}//end of method Refresh
 
 
 	
+	/**Changes plot to the next day at the same time.
+	 * @param Plot
+	 */
 	public void Next(DataPlot Plot)
 	{
 		d++;
@@ -254,6 +258,9 @@ public class Manager extends Application
 	
 	
 	
+	/**Changes plot to the previous day at the same time.
+	 * @param Plot
+	 */
 	public void Previous(DataPlot Plot)
 	{
 		d--;
@@ -267,6 +274,9 @@ public class Manager extends Application
 	
 	
 
+	/**Loads the next datapoint to the left.
+	 * @param Plot
+	 */
 	public void Left(DataPlot Plot)
 	{
 		iMinute-=15;
@@ -290,6 +300,9 @@ public class Manager extends Application
 
 
 
+	/**Loads the next datapoint to the right.
+	 * @param Plot
+	 */
 	public void Right(DataPlot Plot)
 	{
 		iMinute+=15;
