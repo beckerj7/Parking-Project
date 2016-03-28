@@ -51,6 +51,8 @@ public class Manager extends Application
 
 	TextArea taReport;//error reporting text area
 	TextArea taDisplay;//user data display text area
+	
+	DataManager dMan=new DataManager();
 
 	public static void main(String args[])
 	{
@@ -134,7 +136,7 @@ public class Manager extends Application
 				default: System.out.println("Something went wrong with the date switch statement!");
 				}
 
-				Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+				Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
 				VBoxGraph.getChildren().addAll(HBoxBt, Plot);
 			}
 			catch (IOException IOE)// Catching errors that may occur with the file I/O
@@ -250,7 +252,7 @@ public class Manager extends Application
 		d++;
 		if (d>6) d=0;
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
 
 		VBoxGraph.getChildren().clear();//clear VBox
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
@@ -266,7 +268,7 @@ public class Manager extends Application
 		d--;
 		if (d<0) d=6;
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
 
 		VBoxGraph.getChildren().clear();//clear VBox
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
@@ -292,7 +294,7 @@ public class Manager extends Application
 			}
 		}
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
 
 		VBoxGraph.getChildren().clear();//clear VBox
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
@@ -319,7 +321,7 @@ public class Manager extends Application
 		}
 
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
 
 		VBoxGraph.getChildren().clear();
 		VBoxGraph.getChildren().addAll(HBoxBt, Plot);
@@ -369,4 +371,4 @@ public class Manager extends Application
 
 		return destinationFile;//return image location
 	}//end of method ImagePull
-}//end of class ManagerTest
+}//end of class Manager
