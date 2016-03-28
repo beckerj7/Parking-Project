@@ -1,11 +1,6 @@
 package src;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.application.Application;
@@ -22,7 +17,7 @@ import javafx.stage.Stage;
 public class Manager extends Application
 {	
 	//create GUI elements
-	BorderPane BorderPane;
+	BorderPane borderPane;
 	Scene Scene;
 
 	int d;//numerical day indicator
@@ -31,6 +26,7 @@ public class Manager extends Application
 	int taken = highlight.takenSpts; //value grabbed from display class
 	int iHour;
 	int iMinute;
+	int[] hist;
 	Date DandT;
 	String sDate;
 	String sHour;
@@ -39,15 +35,15 @@ public class Manager extends Application
 	SimpleDateFormat Hour;
 	SimpleDateFormat Minute;
 
-	HBox HBoxBt;//HBox for buttons
-	HBox HBoxPics;//HBox for pictures
-	VBox VBoxGraph;//VBox for graph
-	VBox VBoxDisplay;//VBox for data display
+	HBox hbBt;//HBox for buttons
+	HBox hbPics;//HBox for pictures
+	VBox vbGraph;//VBox for graph
+	VBox vbDisplay;//VBox for data display
 
 	String imageLocation; //string for image location on disk
 
-	Image Image; //creates image for ImageView
-	ImageView ImageView=new ImageView(Image); //node to display image
+	Image image; //creates image for imageView
+	ImageView imageView=new ImageView(image); //node to display image
 
 	TextArea taReport;//error reporting text area
 	TextArea taDisplay;//user data display text area
@@ -67,13 +63,13 @@ public class Manager extends Application
 	public void start(Stage Stage)
 	{
 		try
-		{//starts creating the graph being displayed to the user for the days of the week
+		{
 			int i;
 
-			DataPlot Plot=new DataPlot("Time", "Spots Available");
+			DataPlot plot=new DataPlot("Time", "Spots Available");//instantiate DataPlot object
 
 			//GUI element creation
-			BorderPane=new BorderPane();
+			borderPane=new BorderPane();
 
 			//Buttons being used for shift through graphs and refreshing the GUI
 			Button btLeft=new Button("<");
@@ -82,10 +78,10 @@ public class Manager extends Application
 			Button btDayMinus=new Button("<<");
 			Button btRefresh=new Button("Refresh");
 
-			HBoxBt=new HBox();
-			HBoxPics=new HBox();
-			VBoxGraph=new VBox();
-			VBoxDisplay=new VBox();
+			hbBt=new HBox();
+			hbPics=new HBox();
+			vbGraph=new VBox();
+			vbDisplay=new VBox();
 
 			taDisplay=new TextArea();
 			taDisplay.setEditable(false);
@@ -93,14 +89,14 @@ public class Manager extends Application
 			taReport=new TextArea();
 			taReport.setEditable(false);
 
-			ImageView.setFitWidth(800);//imageView formatting
-			ImageView.setPreserveRatio(true);
+			imageView.setFitWidth(800);//imageView formatting
+			imageView.setPreserveRatio(true);
 
 			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 
 			try
 			{
-				imageLocation=ImagePull();//download image to local storage
+				imageLocation=dMan.ImagePull();//download image to local storage
 				DandT = new Date( );
 				DayOfWeek = new SimpleDateFormat ("E");//acquire day
 				sDate = DayOfWeek.format(DandT);//cast to string
@@ -136,8 +132,8 @@ public class Manager extends Application
 				default: System.out.println("Something went wrong with the date switch statement!");
 				}
 
-				Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
-				VBoxGraph.getChildren().addAll(HBoxBt, Plot);
+				hist=plot.Plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
+				vbGraph.getChildren().addAll(hbBt, plot);
 			}
 			catch (IOException IOE)// Catching errors that may occur with the file I/O
 			{
@@ -150,31 +146,36 @@ public class Manager extends Application
 				e.printStackTrace();
 			}
 
-			HBoxBt.getChildren().addAll(btDayMinus, btLeft, btRight, btDayPlus);//add buttons to HBox
-			VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
-
+			
+			dMan.Overwrite(hist, 10, 10000000);
+			
+			
 			//GUI assembly
+			hbBt.getChildren().addAll(btDayMinus, btLeft, btRight, btDayPlus);//add buttons to HBox
+			vbDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
+
 			try
 			{
-				ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
-				BorderPane.setCenter(ImageView);//place image in center pane
+				imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
+				borderPane.setCenter(imageView);//place image in center pane
 			}
 			catch (Exception E)
 			{
 				for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
-				BorderPane.setCenter(taReport);//place image in center pane
+				borderPane.setCenter(taReport);//place image in center pane
 			}
 
-			BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
-			BorderPane.setLeft(VBoxDisplay);//place text area in left pane
+			borderPane.setBottom(vbGraph);//place graph in bottom pane
+			borderPane.setLeft(vbDisplay);//place text area in left pane
 
-			btRefresh.setOnAction(e->Refresh());//refresh button listener
-			btLeft.setOnAction(e->Left(Plot));//cycle graph left button listener
-			btRight.setOnAction(e->Right(Plot));//cycle graph right button listener
-			btDayPlus.setOnAction(e->Next(Plot));
-			btDayMinus.setOnAction(e->Previous(Plot));
+			//button listeners
+			btRefresh.setOnAction(e->Refresh());
+			btLeft.setOnAction(e->Left(plot));
+			btRight.setOnAction(e->Right(plot));
+			btDayPlus.setOnAction(e->Next(plot));
+			btDayMinus.setOnAction(e->Previous(plot));
 
-			Scene=new Scene(BorderPane);//lights!
+			Scene=new Scene(borderPane);//lights!
 			Stage.setScene(Scene);//camera!
 			Stage.show();//action!
 		}
@@ -189,7 +190,7 @@ public class Manager extends Application
 
 		try 
 		{
-			imageLocation=ImagePull();//download image to local storage
+			imageLocation=dMan.ImagePull();//download image to local storage
 			Date DandT = new Date( );
 			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
 			String sDate = DayOfWeek.format(DandT);//cast day to string
@@ -230,15 +231,15 @@ public class Manager extends Application
 		}
 		try
 		{
-			ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
-			BorderPane.setCenter(ImageView);//place image in center pane
+			imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
+			borderPane.setCenter(imageView);//place image in center pane
 		}
 		catch (Exception E)
 		{
 			taReport.clear();
 			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");//error message
 			
-			BorderPane.setCenter(taReport);//place image in center pane
+			borderPane.setCenter(taReport);//place image in center pane
 		}
 	}//end of method Refresh
 
@@ -252,10 +253,10 @@ public class Manager extends Application
 		d++;
 		if (d>6) d=0;
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
-		VBoxGraph.getChildren().clear();//clear VBox
-		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
+		vbGraph.getChildren().clear();//clear VBox
+		vbGraph.getChildren().addAll(hbBt, Plot);//reload VBox
 	}//end of method Next
 	
 	
@@ -268,10 +269,10 @@ public class Manager extends Application
 		d--;
 		if (d<0) d=6;
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
-		VBoxGraph.getChildren().clear();//clear VBox
-		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
+		vbGraph.getChildren().clear();//clear VBox
+		vbGraph.getChildren().addAll(hbBt, Plot);//reload VBox
 	}//end of method Previous
 	
 	
@@ -294,10 +295,10 @@ public class Manager extends Application
 			}
 		}
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
-		VBoxGraph.getChildren().clear();//clear VBox
-		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
+		vbGraph.getChildren().clear();//clear VBox
+		vbGraph.getChildren().addAll(hbBt, Plot);//reload VBox
 	}//end of method Left
 
 
@@ -321,54 +322,9 @@ public class Manager extends Application
 		}
 
 		Plot=new DataPlot("Time", "Spots Available");
-		Plot.Plot(dMan, d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.Plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
-		VBoxGraph.getChildren().clear();
-		VBoxGraph.getChildren().addAll(HBoxBt, Plot);
+		vbGraph.getChildren().clear();
+		vbGraph.getChildren().addAll(hbBt, Plot);
 	}//end of method Right
-
-
-	public static String ImagePull() throws Exception
-	{
-		int i=0;//counter variable
-		boolean check;//file existence variable
-
-		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg"; //url where image will be taken from
-
-		do//avoid overwriting existing images
-		{
-			i++;
-			check=new File("image" + i + ".jpg").exists();
-		}while (check==true);
-
-		String destinationFile="image" + i + ".jpg";//set image destination
-
-		try
-		{
-			/*****************************************************************/
-			/* Copyright 2013 Code Strategies                                */
-			/* This code may be freely used and distributed in any project.  */
-			/* However, please do not remove this credit if you publish this */
-			/* code in paper or electronic form, such as on a web site.      */
-			/*****************************************************************/
-			int length;
-			URL url=new URL(imageURL); //object for image url
-			InputStream is=url.openStream();
-			OutputStream os=new FileOutputStream(destinationFile); //object for image destination
-
-			byte[] b=new byte[2048];
-
-			while ((length=is.read(b))!=-1) os.write(b, 0, length);
-
-			is.close();
-			os.close();
-		}//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
-		catch (IOException e1)//catch file I/O exceptions
-		{
-			System.out.println("Something went wrong with the file I/O!");//error message
-			e1.printStackTrace();
-		}
-
-		return destinationFile;//return image location
-	}//end of method ImagePull
 }//end of class Manager
