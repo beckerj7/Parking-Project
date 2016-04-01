@@ -1,18 +1,36 @@
 package src;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimerTask;
 
-public class DataManager
+
+//Jeffrey Becker
+public class DataManager extends TimerTask
 {
-	public int[] Read()
+	/**Reads the historical data file into a single array for ease of access.
+	 * @return An array containing the ordered historical data.
+	 */
+
+	Date date;
+	int last;
+
+	public int[] read()
 	{
 		int i;
-		int Hist[]=new int[672];
+		int hist[]=new int[672];
 		String line;
-		
+
 		try
 		{
 			File file=new File("Dummy.txt"); //Takes in the hard coded data from over a weeks analysis
@@ -23,8 +41,8 @@ public class DataManager
 			//loops through the data in order to create the official graph
 			for (i=0; i<672; i++)
 			{
-				Hist[i]=Integer.parseInt(line);//cast line to integer and save to array
-				line=in.readLine();			
+				hist[i]=Integer.parseInt(line);//cast line to integer and save to array
+				line=in.readLine();
 			}
 			in.close();//close reader
 		}
@@ -33,6 +51,106 @@ public class DataManager
 			System.out.println("Something is wrong with the dataplot file I/O!");//error message
 			IOE.printStackTrace();
 		}
-		return Hist;
+		return hist;
 	}//end of method Read
-}
+
+
+
+	/**Overwrites the historical data file with updated information given the array of data, a position in the array, and a new value.
+	 * @param hist
+	 * @param ref
+	 * @param update
+	 * @return Updated data array
+	 * @throws IOException
+	 */
+	public int[] overwrite(int[] hist, int ref, int update) throws IOException
+	{
+		int i;
+
+		BufferedWriter out=new BufferedWriter(new FileWriter("Dummy.txt"));//create new file
+
+		hist[ref]=update;
+
+		for (i=0; i<672; i++) out.write(hist[i] + "\r\n");
+
+		out.close();
+
+		return hist;
+	}//end of method Overwrite
+
+
+
+	/**Downloads the current camera image to local storage as a .jpg file.
+	 * Does not overwrite previously saved images in the same directory
+	 * @return The location of the image on disk.
+	 * @throws Exception
+	 */
+	public String imagePull() throws Exception
+	{
+		int i=0;//counter variable
+		boolean check;//file existence variable
+
+		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg";//url where image will be taken from
+
+		do//avoid overwriting existing images
+		{
+			i++;
+			check=new File("image" + i + ".jpg").exists();
+		}while (check==true);
+
+		String destinationFile="image" + i + ".jpg";//set image destination
+
+		try
+		{
+			//Deron Eriksson
+			/*****************************************************************/
+			/* Copyright 2013 Code Strategies                                */
+			/* This code may be freely used and distributed in any project.  */
+			/* However, please do not remove this credit if you publish this */
+			/* code in paper or electronic form, such as on a web site.      */
+			/*****************************************************************/
+			int length;
+			URL url=new URL(imageURL); //object for image url
+			InputStream is=url.openStream();
+			OutputStream os=new FileOutputStream(destinationFile); //object for image destination
+
+			byte[] b=new byte[2048];
+
+			while ((length=is.read(b))!=-1) os.write(b, 0, length);
+
+			is.close();
+			os.close();
+		}//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
+		catch (IOException e1)//catch file I/O exceptions
+		{
+			System.out.println("Something went wrong with the file I/O!");//error message
+			e1.printStackTrace();
+		}
+
+		return destinationFile;//return image location
+	}//end of method ImagePull
+	public void setDate(Date date){
+		this.date=date;
+	}
+
+
+	@Override
+	public void run()
+	{
+		Date dAndT = new Date( );
+		SimpleDateFormat minute = new SimpleDateFormat ("mm");//acquire minute
+		String sMinute = minute.format(dAndT);//cast to string
+		int iMinute=Integer.parseInt(sMinute);//cast to integer
+		
+		if (iMinute!=last)
+		{
+			try
+			{
+				imagePull();
+				last=iMinute;
+				System.out.println("Saved image");
+			}
+			catch (Exception e) {e.printStackTrace();}
+		}
+	}
+}//end of class DataManager
