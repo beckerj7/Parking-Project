@@ -21,14 +21,16 @@ public class DataManager extends TimerTask
 	/**Reads the historical data file into a single array for ease of access.
 	 * @return An array containing the ordered historical data.
 	 */
+	int last=-1;
+	int hist[]=new int[672];
 
-	Date date;
-	int last;
+	public DataManager(Manager man){}//custom constructor accepts Manager object
+
+
 
 	public int[] read()
 	{
 		int i;
-		int hist[]=new int[672];
 		String line;
 
 		try
@@ -129,26 +131,83 @@ public class DataManager extends TimerTask
 
 		return destinationFile;//return image location
 	}//end of method ImagePull
-	public void setDate(Date date){
-		this.date=date;
+
+
+
+	public int predict(Manager man, int d, int h, int m)
+	{
+		int wait;
+		int c=0;
+		int ref=d*96+h*4+m/15;
+		
+		while (hist[ref]==0)
+		{
+			System.out.println(hist[ref]);
+			c++;
+			ref++;
+		}
+		wait=c*15-m%15;
+		System.out.println("Wait: " + wait);
+		
+		
+		return wait;
 	}
 
 
 	@Override
 	public void run()
 	{
-		Date dAndT = new Date( );
-		SimpleDateFormat minute = new SimpleDateFormat ("mm");//acquire minute
-		String sMinute = minute.format(dAndT);//cast to string
-		int iMinute=Integer.parseInt(sMinute);//cast to integer
-		
-		if (iMinute!=last)
+		int d=0;
+		int ref;
+		String destination=null;
+
+		Date dAndT;
+		String sDate;
+		String sHour;
+		String sMinute;
+		SimpleDateFormat dayOfWeek;
+		SimpleDateFormat hour;
+		SimpleDateFormat minute;
+		int iHour;
+		int iMinute;
+
+		dAndT = new Date( );
+		dayOfWeek = new SimpleDateFormat ("E");//acquire day
+		sDate = dayOfWeek.format(dAndT);//cast to string
+		hour = new SimpleDateFormat ("kk");//acquire hour
+		sHour = hour.format(dAndT);//cast to string
+		minute = new SimpleDateFormat ("mm");//acquire minute
+		sMinute = minute.format(dAndT);//cast to string
+		iHour=Integer.parseInt(sHour);//cast to integer
+		iMinute=Integer.parseInt(sMinute);//cast to integer
+
+		if (iHour==24) sHour=String.valueOf(iHour=0);//preserve arithmetic logic
+
+		switch (sDate)//cast day to a representative number
+		{
+		case "Sun": d = 0;
+		case "Mon": d = 1;
+		case "Tue": d = 2;
+		case "Wed": d = 3;
+		case "Thu": d = 4;
+		case "Fri": d = 5;
+		case "Sat": d = 6;
+		break;
+		default: System.out.println("Something went wrong with the date switch statement!");
+		}
+
+		ref=d*96+iHour*4+iMinute/15;
+
+		if ((iMinute==0||iMinute==15||iMinute==30||iMinute==45)&&iMinute!=last)
+//		if (true)
 		{
 			try
 			{
-				imagePull();
+				destination=imagePull();
 				last=iMinute;
-				System.out.println("Saved image");
+				System.out.println("Saved image:\t" + destination);
+
+//				System.out.println(overwrite(hist, ref, highlight.main(destination)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}
