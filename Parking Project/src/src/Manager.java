@@ -14,6 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -48,8 +51,14 @@ public class Manager extends Application
 	HBox hbBt;//HBox for buttons
 	HBox hbPics;//HBox for pictures
 	VBox vbGraph;//VBox for graph
-	VBox vbDisplay;//VBox for data display
-	VBox vbTA;
+	VBox vbTA;//VBox for data display
+
+	Button btLeft;
+	Button btRight;
+	Button btDayPlus;
+	Button btDayMinus;
+	Button btRefresh;
+	Button btAck;
 
 	String imageLocation; //string for image location on disk
 
@@ -59,7 +68,11 @@ public class Manager extends Application
 	TextArea taReport;//error reporting text area
 	TextArea taDisplay;//user data display text area
 
-	DataManager dMan=new DataManager(this);
+	Text txtWait;
+	
+	DataPlot plot;
+
+	DataManager dMan=new DataManager();
 
 	public static void main(String args[])
 	{
@@ -75,22 +88,23 @@ public class Manager extends Application
 		{
 			int i;
 
-			DataPlot plot=new DataPlot("Time", "Spots Available");//instantiate DataPlot object
+			plot=new DataPlot("Time", "Spots Available");//instantiate DataPlot object
 
 			//GUI element creation
 			borderPane=new BorderPane();
 
 			//Buttons being used for shift through graphs and refreshing the GUI
-			Button btLeft=new Button("<");
-			Button btRight=new Button(">");
-			Button btDayPlus=new Button(">>");
-			Button btDayMinus=new Button("<<");
-			Button btRefresh=new Button("Refresh");
+			btLeft=new Button("<");
+			btRight=new Button(">");
+			btDayPlus=new Button(">>");
+			btDayMinus=new Button("<<");
+			btRefresh=new Button("Refresh");
+			btAck=new Button("Got it!");
 
 			hbBt=new HBox();
 			hbPics=new HBox();
 			vbGraph=new VBox();
-			vbDisplay=new VBox();
+			vbTA=new VBox();
 			vbTA=new VBox();
 
 			taDisplay=new TextArea();
@@ -102,14 +116,13 @@ public class Manager extends Application
 			imageView.setFitWidth(800);//imageView formatting
 			imageView.setPreserveRatio(true);
 
-			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
-
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
 				//				spotsA=highlight.main(imageLocation);
-				spotsA=1;
-
+				spotsA=0;
+				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+				taDisplay.setFont(Font.font ("Veranda", 30));
 				//Brandon Koury
 				dAndT = new Date( );
 				dayOfWeek = new SimpleDateFormat ("E");//acquire day
@@ -145,18 +158,18 @@ public class Manager extends Application
 				break;
 				default: System.out.println("Something went wrong with the date switch statement!");
 				}
-
+				//Jeffrey Becker
 				dMan.read();
 
 				if (spotsA==0)
 				{
-					TextArea taWait=new TextArea();
-					taWait.appendText("Estimated time until next spot is available: " + String.valueOf(dMan.predict(this, d, iHour, iMinute)) + " minutes.");
-					vbDisplay.getChildren().addAll(taWait, taDisplay, btRefresh);
+					txtWait=new Text("Estimated time until\nnext spot is available:\n" + String.valueOf(dMan.predict(this, d, iHour, iMinute)) + " minutes.");
+					txtWait.setFont(Font.font ("Veranda", 40));
+					txtWait.setFill(Color.RED);
+					vbTA.getChildren().addAll(txtWait, btAck, taDisplay, btRefresh);
 				}
-				else vbDisplay.getChildren().addAll(taDisplay, btRefresh);
-
-				//Jeffrey Becker
+				else vbTA.getChildren().addAll(taDisplay, btRefresh);
+				
 				hist=plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 				vbGraph.getChildren().addAll(hbBt, plot);
 			}
@@ -172,7 +185,7 @@ public class Manager extends Application
 			}
 
 
-			//			dMan.Overwrite(hist, 2, 999999000);
+//			dMan.Overwrite(hist, 2, 999999000);
 
 
 			//GUI assembly
@@ -190,7 +203,7 @@ public class Manager extends Application
 			}
 
 			borderPane.setBottom(vbGraph);//place graph in bottom pane
-			borderPane.setLeft(vbDisplay);//place text area in left pane
+			borderPane.setLeft(vbTA);//place text area in left pane
 
 			//button listeners
 			btRefresh.setOnAction(e->refresh());
@@ -198,6 +211,7 @@ public class Manager extends Application
 			btRight.setOnAction(e->right(plot));
 			btDayPlus.setOnAction(e->next(plot));
 			btDayMinus.setOnAction(e->previous(plot));
+			btAck.setOnAction(e->acknowledge());
 
 			scene=new Scene(borderPane);//lights!
 			Stage.setScene(scene);//camera!
@@ -215,21 +229,35 @@ public class Manager extends Application
 	public void refresh()//update to current camera image
 	{
 		int i;
+		taDisplay.clear();
+		vbTA.getChildren().clear();
 
-		try 
+		try
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
-			Date DandT = new Date( );
-			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
-			String sDate = DayOfWeek.format(DandT);//cast day to string
-			SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
-			String sHour = Hour.format(DandT);//cast hour to string
-			SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
-			String sMinute = Minute.format(DandT);//cast minute to string
-			taDisplay.clear();//clear the text area
-			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
-			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//add date and time to text area
+			//				spotsA=highlight.main(imageLocation);
+			spotsA=0;
+
+			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+			taDisplay.setFont(Font.font ("Veranda", 30));
 			//Brandon Koury
+			dAndT = new Date( );
+			dayOfWeek = new SimpleDateFormat ("E");//acquire day
+			sDate = dayOfWeek.format(dAndT);//cast to string
+			hour = new SimpleDateFormat ("kk");//acquire hour
+			sHour = hour.format(dAndT);//cast to string
+			minute = new SimpleDateFormat ("mm");//acquire minute
+			sMinute = minute.format(dAndT);//cast to string
+			iHour=Integer.parseInt(sHour);//cast to integer
+			iMinute=Integer.parseInt(sMinute);//cast to integer
+
+			if (iHour==24)//preserve arithmetic logic
+			{
+				iHour=0;
+				sHour=String.valueOf(iHour);
+			}
+			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+
 			switch (sDate){//cast day to a representative number
 			case "Sun": d = 0;
 			break;
@@ -245,30 +273,29 @@ public class Manager extends Application
 			break;
 			case "Sat": d = 6;
 			break;
+			default: System.out.println("Something went wrong with the date switch statement!");
 			}
 			//Jeffrey Becker
+			dMan.read();
+
+			if (spotsA==0)
+			{
+				txtWait=new Text("Estimated time until\nnext spot is available:\n" + String.valueOf(dMan.predict(this, d, iHour, iMinute)) + " minutes.");
+				txtWait.setFont(Font.font ("Veranda", 40));
+				txtWait.setFill(Color.RED);
+				vbTA.getChildren().addAll(txtWait, btAck, taDisplay, btRefresh);
+			}
+			else vbTA.getChildren().addAll(taDisplay, btRefresh);
 		}
-		catch (IOException ioe)
+		catch (IOException ioe)// Catching errors that may occur with the file I/O
 		{
-			System.out.println("Something is wrong with the file I/O!");//error message
+			System.out.println("Something is wrong with the file I/O!");
 			ioe.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.out.println("Something is wrong with the image pull and I don`t know what!");//error message
+			System.out.println("Something is wrong with the image pull and I don`t know what!");
 			e.printStackTrace();
-		}
-		try
-		{
-			imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
-			borderPane.setCenter(imageView);//place image in center pane
-		}
-		catch (Exception e)
-		{
-			taReport.clear();
-			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");//error message
-
-			borderPane.setCenter(taReport);//place image in center pane
 		}
 	}//end of method refresh
 
@@ -356,4 +383,17 @@ public class Manager extends Application
 		vbGraph.getChildren().clear();
 		vbGraph.getChildren().addAll(hbBt, Plot);
 	}//end of method right
+
+
+
+	public void acknowledge()
+	{
+		try
+		{
+			vbTA.getChildren().clear();
+			vbTA.getChildren().addAll(taDisplay, btRefresh);
+			borderPane.setLeft(vbTA);
+		}
+		catch (Exception E) {E.printStackTrace();}
+	}
 }//end of class Manager
