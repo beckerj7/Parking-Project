@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,7 +23,6 @@ import javafx.stage.Stage;
 
 /**
  * @author Jeffrey Becker
- * @author Brandon Koury
  * Launches and manages GUI and manages the call of the program's methods
  */
 
@@ -31,6 +31,12 @@ public class Manager extends Application
 {	
 	//create GUI elements
 	BorderPane borderPane;
+	StackPane top;
+	StackPane left;
+	StackPane center;
+	StackPane right;
+	StackPane bottom;
+	
 	Scene scene;
 
 	int spots = highlight.availableSpts; //value grabbed from display class
@@ -92,12 +98,14 @@ public class Manager extends Application
 
 			//GUI element creation
 			borderPane=new BorderPane();
+			left=new StackPane();
+			left.setPrefSize(600, 400);
 
 			//Buttons being used for shift through graphs and refreshing the GUI
 			btLeft=new Button("<");
 			btRight=new Button(">");
-			btDayPlus=new Button(">>");
 			btDayMinus=new Button("<<");
+			btDayPlus=new Button(">>");
 			btRefresh=new Button("Refresh");
 			btAck=new Button("Got it!");
 
@@ -123,42 +131,9 @@ public class Manager extends Application
 				spotsA=0;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 				taDisplay.setFont(Font.font ("Veranda", 30));
-				//Brandon Koury
-				dAndT = new Date( );
-				dayOfWeek = new SimpleDateFormat ("E");//acquire day
-				sDate = dayOfWeek.format(dAndT);//cast to string
-				hour = new SimpleDateFormat ("kk");//acquire hour
-				sHour = hour.format(dAndT);//cast to string
-				minute = new SimpleDateFormat ("mm");//acquire minute
-				sMinute = minute.format(dAndT);//cast to string
-				iHour=Integer.parseInt(sHour);//cast to integer
-				iMinute=Integer.parseInt(sMinute);//cast to integer
-
-				if (iHour==24)//preserve arithmetic logic
-				{
-					iHour=0;
-					sHour=String.valueOf(iHour);
-				}
-				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
-
-				switch (sDate){//cast day to a representative number
-				case "Sun": d = 0;
-				break;
-				case "Mon": d = 1;
-				break;
-				case "Tue": d = 2;
-				break;
-				case "Wed": d = 3;
-				break;
-				case "Thu": d = 4;
-				break;
-				case "Fri": d = 5;
-				break;
-				case "Sat": d = 6;
-				break;
-				default: System.out.println("Something went wrong with the date switch statement!");
-				}
-				//Jeffrey Becker
+				
+				getDate();
+				
 				dMan.read();
 
 				if (spotsA==0)
@@ -202,8 +177,9 @@ public class Manager extends Application
 				borderPane.setCenter(taReport);//place image in center pane
 			}
 
+			left.getChildren().addAll(vbTA);
 			borderPane.setBottom(vbGraph);//place graph in bottom pane
-			borderPane.setLeft(vbTA);//place text area in left pane
+			borderPane.setLeft(left);//place text area in left pane
 
 			//button listeners
 			btRefresh.setOnAction(e->refresh());
@@ -226,9 +202,13 @@ public class Manager extends Application
 
 
 
+	/**
+	 * 
+	 */
 	public void refresh()//update to current camera image
 	{
 		int i;
+		
 		taDisplay.clear();
 		vbTA.getChildren().clear();
 
@@ -240,42 +220,9 @@ public class Manager extends Application
 
 			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.setFont(Font.font ("Veranda", 30));
-			//Brandon Koury
-			dAndT = new Date( );
-			dayOfWeek = new SimpleDateFormat ("E");//acquire day
-			sDate = dayOfWeek.format(dAndT);//cast to string
-			hour = new SimpleDateFormat ("kk");//acquire hour
-			sHour = hour.format(dAndT);//cast to string
-			minute = new SimpleDateFormat ("mm");//acquire minute
-			sMinute = minute.format(dAndT);//cast to string
-			iHour=Integer.parseInt(sHour);//cast to integer
-			iMinute=Integer.parseInt(sMinute);//cast to integer
-
-			if (iHour==24)//preserve arithmetic logic
-			{
-				iHour=0;
-				sHour=String.valueOf(iHour);
-			}
-			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
-
-			switch (sDate){//cast day to a representative number
-			case "Sun": d = 0;
-			break;
-			case "Mon": d = 1;
-			break;
-			case "Tue": d = 2;
-			break;
-			case "Wed": d = 3;
-			break;
-			case "Thu": d = 4;
-			break;
-			case "Fri": d = 5;
-			break;
-			case "Sat": d = 6;
-			break;
-			default: System.out.println("Something went wrong with the date switch statement!");
-			}
-			//Jeffrey Becker
+			
+			getDate();
+			
 			dMan.read();
 
 			if (spotsA==0)
@@ -296,6 +243,16 @@ public class Manager extends Application
 		{
 			System.out.println("Something is wrong with the image pull and I don`t know what!");
 			e.printStackTrace();
+		}
+		try
+		{
+			imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
+			borderPane.setCenter(imageView);//place image in center pane
+		}
+		catch (Exception e)
+		{
+			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
+			borderPane.setCenter(taReport);//place image in center pane
 		}
 	}//end of method refresh
 
@@ -392,8 +349,51 @@ public class Manager extends Application
 		{
 			vbTA.getChildren().clear();
 			vbTA.getChildren().addAll(taDisplay, btRefresh);
-			borderPane.setLeft(vbTA);
+			borderPane.setLeft(left);
 		}
 		catch (Exception E) {E.printStackTrace();}
+	}
+	
+	
+	
+	/**Obtains the current date and time from the device running the program for use in the Manager class.
+	 * @author Brandon Koury
+	 * 
+	 */
+	public void getDate()
+	{
+		//Brandon Koury
+		dAndT = new Date( );
+		dayOfWeek = new SimpleDateFormat ("E");//acquire day
+		sDate = dayOfWeek.format(dAndT);//cast to string
+		hour = new SimpleDateFormat ("kk");//acquire hour
+		sHour = hour.format(dAndT);//cast to string
+		minute = new SimpleDateFormat ("mm");//acquire minute
+		sMinute = minute.format(dAndT);//cast to string
+		iHour=Integer.parseInt(sHour);//cast to integer
+		iMinute=Integer.parseInt(sMinute);//cast to integer
+
+		if (iHour==24) sHour=String.valueOf(iHour=0);//preserve arithmetic logic
+		
+		taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+		
+		//cast day to a representative number
+		switch (sDate){
+		case "Sun": d = 0;
+		break;
+		case "Mon": d = 1;
+		break;
+		case "Tue": d = 2;
+		break;
+		case "Wed": d = 3;
+		break;
+		case "Thu": d = 4;
+		break;
+		case "Fri": d = 5;
+		break;
+		case "Sat": d = 6;
+		break;
+		default: System.out.println("Something went wrong with the date switch statement!");
+		}
 	}
 }//end of class Manager

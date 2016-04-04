@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -11,14 +10,15 @@ import javax.swing.JLabel;
 
 //ERROR WITH CODE: will display available spots of image with the most avilable spots, eg image 1 has to be a full parking lot image
 
+//Kate Williams
 public class highlight {
 	public static int availableSpts;	//declare available spots 
 	public static int takenSpts;		//declare taken spots
 
-	public static void main(String[] args) throws IOException {
+	public static int main(String destination) throws IOException {
 
-		BufferedImage img1 = ImageIO.read(new File("image1.jpg")); // full parking lot
-		BufferedImage img2 = ImageIO.read(new File("image3.jpg")); //current time parking lot
+		BufferedImage img1 = ImageIO.read(new File("empty.jpg")); // full parking lot
+		BufferedImage img2 = ImageIO.read(new File(destination)); //current time parking lot
 		int width1 = img1.getWidth(); // Change - getWidth() and getHeight() for BufferedImage
 		int width2 = img2.getWidth(); // take no arguments
 		int height1 = img1.getHeight();
@@ -83,5 +83,6 @@ public class highlight {
 		System.out.println(count);
 		System.out.println("Available Spots: " + availableSpts);
 		System.out.println("Taken Spots: " + takenSpts);
+		return availableSpts;
 	}
 }

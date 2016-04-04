@@ -24,10 +24,6 @@ public class DataManager extends TimerTask
 	int last=-1;
 	int hist[]=new int[672];
 
-	public DataManager(Manager man){}//custom constructor accepts Manager object
-
-
-
 	public int[] read()
 	{
 		int i;
@@ -83,7 +79,7 @@ public class DataManager extends TimerTask
 
 
 	/**Downloads the current camera image to local storage as a .jpg file.
-	 * Does not overwrite previously saved images in the same directory
+	 * Does not overwrite previously saved images in the same directory.
 	 * @return The location of the image on disk.
 	 * @throws Exception
 	 */
@@ -94,7 +90,8 @@ public class DataManager extends TimerTask
 
 		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg";//url where image will be taken from
 
-		do//avoid overwriting existing images
+		//avoid overwriting existing images
+		do
 		{
 			i++;
 			check=new File("image" + i + ".jpg").exists();
@@ -137,18 +134,24 @@ public class DataManager extends TimerTask
 	public int predict(Manager man, int d, int h, int m)
 	{
 		int wait;
-		int c=0;
-		int ref=d*96+h*4+m/15;
-		
-		while (hist[ref]==0)
+		int c=1;
+		int ref=d*96+h*4+m/15+1;
+		int start=d*96+h*4+m/15;
+
+		while (hist[ref]==0&&ref!=start)
 		{
 			System.out.println(hist[ref]);
 			c++;
 			ref++;
+			if (ref==672) ref=0;
 		}
-		wait=c*15-m%15;
-		System.out.println("Wait: " + wait);
-		
+
+		if (ref==start)
+		{
+			System.out.println("Zero open spots projected for the forseeable future.");
+			wait=Integer.MAX_VALUE;
+		}
+		else wait=c*15-m%15;
 		
 		return wait;
 	}
@@ -199,7 +202,6 @@ public class DataManager extends TimerTask
 		ref=d*96+iHour*4+iMinute/15;
 
 		if ((iMinute==0||iMinute==15||iMinute==30||iMinute==45)&&iMinute!=last)
-//		if (true)
 		{
 			try
 			{
@@ -207,9 +209,9 @@ public class DataManager extends TimerTask
 				last=iMinute;
 				System.out.println("Saved image:\t" + destination);
 
-//				System.out.println(overwrite(hist, ref, highlight.main(destination)));
+				//				System.out.println(overwrite(hist, ref, highlight.main(destination)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}
-	}
+	}//end of method run
 }//end of class DataManager

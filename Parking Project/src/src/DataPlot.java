@@ -5,9 +5,11 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
+
+//Jeffrey Becker
 public class DataPlot extends LineChart<String,Number>
 {
-	int[] Hist=new int[672];
+	int[] hist=new int[672];
 
 	public DataPlot(String PlotX, String PlotY)
 	{
@@ -16,11 +18,11 @@ public class DataPlot extends LineChart<String,Number>
 		this.getYAxis().setLabel(PlotY);//label y-axis
 
 		setLegendVisible(false);
-	}//end of method DataPlotTest
+	}//end of method DataPlot
 
 
 
-	public void Plot(DataManager dMan, int d, int h, int m, Manager man)
+	public int[] plot(int d, int h, int m, Manager man, DataManager dMan)
 	{
 		int i=0;
 		int ref=d*96+h*4+m/15;
@@ -30,9 +32,9 @@ public class DataPlot extends LineChart<String,Number>
 		boolean flag1=false;
 		boolean flag2=false;
 
-		Hist=dMan.Read();
+		hist=dMan.read();
 
-		//Logic for identifying the data for the day of the week
+		//prepare title string for day of week
 		if (d==0) day="Sunday";
 		if (d==1) day="Monday";
 		if (d==2) day="Tuesday";
@@ -93,7 +95,7 @@ public class DataPlot extends LineChart<String,Number>
 					i-=672;
 					flag2=true;
 				}
-				series.getData().add(new XYChart.Data<String, Number>(head1 + h + ":" + head2 + m, Hist[i]));
+				series.getData().add(new XYChart.Data<String, Number>(head1 + h + ":" + head2 + m, hist[i]));
 				if (flag1)//array looping/out-of-bounds prevention
 				{
 					i-=672;
@@ -121,5 +123,7 @@ public class DataPlot extends LineChart<String,Number>
 			man.taDisplay.appendText("\nSomething went wrong with the dataplot!");
 		}
 		getData().add(series);
-	}//end of method Plot
-}//end of class DataPlotTest
+		
+		return hist;
+	}//end of method plot
+}//end of class DataPlot
