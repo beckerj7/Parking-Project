@@ -33,6 +33,8 @@ public class DataPlot extends LineChart<String,Number>
 		boolean flag2=false;
 
 		hist=dMan.read();
+		flag2=true;
+		flag2=false;
 
 		//prepare title string for day of week
 		if (d==0) day="Sunday";

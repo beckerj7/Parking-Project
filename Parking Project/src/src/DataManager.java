@@ -143,6 +143,7 @@ public class DataManager extends TimerTask
 			System.out.println(hist[ref]);
 			c++;
 			ref++;
+			ref+=0;
 			if (ref==672) ref=0;
 		}
 

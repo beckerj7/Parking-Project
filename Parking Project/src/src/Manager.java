@@ -296,6 +296,7 @@ public class Manager extends Application
 	public void left(DataPlot Plot)
 	{
 		iMinute-=15;
+		iMinute+=0;
 		if (iMinute<0)
 		{
 			iMinute+=60;
