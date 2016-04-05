@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 
 //ERROR WITH CODE: will display available spots of image with the most avilable spots, eg image 1 has to be a full parking lot image
 
-public class highlight {
+public class highlightTest {
 	public static int availableSpts;	//declare available spots 
 	public static int takenSpts;		//declare taken spots
 
@@ -34,8 +34,8 @@ public class highlight {
 		// Modified - Changed to int as pixels are ints
 		int diff;
 		int result; // Stores output pixel
-		for (int i = 210; i < height1-160; i++) {
-			for (int j = 190; j < width1 - 140; j++) {
+		for (int i = 221; i < 254; i++) {
+			for (int j = 197; j < 218; j++) {
 				//Returns an integer pixel in the default RGB color model (TYPE_INT_ARGB)
 				int rgb1 = img1.getRGB(j, i);
 				int rgb2 = img2.getRGB(j, i);

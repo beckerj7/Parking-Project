@@ -33,8 +33,6 @@ public class DataPlot extends LineChart<String,Number>
 		boolean flag2=false;
 
 		hist=dMan.read();
-		flag2=true;
-		flag2=false;
 
 		//prepare title string for day of week
 		if (d==0) day="Sunday";
@@ -50,24 +48,12 @@ public class DataPlot extends LineChart<String,Number>
 
 		try//plot each datapoint from the data files
 		{
-			m-=30;
-			if (m<0)
-			{
-				m+=60;
-				h--;
-				if (h<0)
-				{
-					h=23;
-					d--;
-					if (d<0) d=6;
-				}
-			}
 			if (m<15) m=0;
 			else if (m<30) m=15;
 			else if (m<45) m=30;
 			else if (m<60) m=45;
 
-			for (i=(ref-2); i<(ref+7); i++)
+			for (i=(ref); i<(ref+9); i++)
 			{
 				if (m==60)
 				{
@@ -109,13 +95,13 @@ public class DataPlot extends LineChart<String,Number>
 					flag2=false;
 				}
 
-				if (89<ref&&ref<98) setTitle("Sunday/Monday");//set the title
-				if (185<ref&&ref<194) setTitle("Monday/Tuesday");
-				if (281<ref&&ref<290) setTitle("Tuesday/Wednesday");
-				if (377<ref&&ref<386) setTitle("Wednesday/Thursday");
-				if (473<ref&&ref<482) setTitle("Thursday/Friday");
-				if (569<ref&&ref<578) setTitle("Friday/Saturday");
-				if (665<ref||ref<2) setTitle("Saturday/Sunday");
+				if (87<ref&&ref<96) setTitle("Sunday/Monday");//set the title
+				if (183<ref&&ref<192) setTitle("Monday/Tuesday");
+				if (279<ref&&ref<288) setTitle("Tuesday/Wednesday");
+				if (375<ref&&ref<384) setTitle("Wednesday/Thursday");
+				if (471<ref&&ref<480) setTitle("Thursday/Friday");
+				if (567<ref&&ref<576) setTitle("Friday/Saturday");
+				if (663<ref||ref<0) setTitle("Saturday/Sunday");
 				m+=15;//advance to the next datapoint
 			}
 		}
