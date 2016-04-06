@@ -27,8 +27,8 @@ public class ManagerTest extends Application
 
 	int d;//numerical day indicator
 	int ref=0;
-	int spots = highlight.availableSpts; //value grabbed from display class
-	int taken = highlight.takenSpts; //value grabbed from display class
+	int spots = highlightTest.availableSpts; //value grabbed from display class
+	int taken = highlightTest.takenSpts; //value grabbed from display class
 	int iHour;
 	int iMinute;
 	Date DandT;
@@ -46,7 +46,7 @@ public class ManagerTest extends Application
 
 	String imageLocation; //string for image location on disk
 
-	Image Image; //creates image for ImageView
+	Image Image; //creates image for imageView
 	ImageView ImageView=new ImageView(Image); //node to display image
 
 	TextArea taReport;//error reporting text area

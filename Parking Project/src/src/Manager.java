@@ -127,7 +127,7 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-				//				spotsA=highlight.main(imageLocation);
+				//				spotsA=highlightTest.main(imageLocation);
 				spotsA=0;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 				taDisplay.setFont(Font.font ("Veranda", 30));
@@ -202,8 +202,8 @@ public class Manager extends Application
 
 
 
-	/**
-	 * 
+	/**Replaces all GUI information with up-to-date values.
+	 * @author Jeffrey Becker
 	 */
 	public void refresh()//update to current camera image
 	{
@@ -215,7 +215,7 @@ public class Manager extends Application
 		try
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
-			//				spotsA=highlight.main(imageLocation);
+			//				spotsA=highlightTest.main(imageLocation);
 			spotsA=0;
 
 			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
@@ -234,16 +234,8 @@ public class Manager extends Application
 			}
 			else vbTA.getChildren().addAll(taDisplay, btRefresh);
 		}
-		catch (IOException ioe)// Catching errors that may occur with the file I/O
-		{
-			System.out.println("Something is wrong with the file I/O!");
-			ioe.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			System.out.println("Something is wrong with the image pull and I don`t know what!");
-			e.printStackTrace();
-		}
+		catch (IOException ioe) {ioe.printStackTrace();}// Catching errors that may occur with the file I/O
+		catch (Exception e) {e.printStackTrace();}
 		try
 		{
 			imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
@@ -251,6 +243,7 @@ public class Manager extends Application
 		}
 		catch (Exception e)
 		{
+			taReport.clear();
 			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
 			borderPane.setCenter(taReport);//place image in center pane
 		}
@@ -260,6 +253,7 @@ public class Manager extends Application
 
 	/**Changes plot to the next day at the same time.
 	 * @param Plot
+	 * @author Jeffrey Becker
 	 */
 	public void next(DataPlot Plot)
 	{
@@ -276,6 +270,7 @@ public class Manager extends Application
 
 	/**Changes plot to the previous day at the same time.
 	 * @param Plot
+	 * @author Jeffrey Becker
 	 */
 	public void previous(DataPlot Plot)
 	{
@@ -292,11 +287,11 @@ public class Manager extends Application
 
 	/**Loads the next datapoint to the left.
 	 * @param Plot
+	 * @author Jeffrey Becker
 	 */
 	public void left(DataPlot Plot)
 	{
 		iMinute-=15;
-		iMinute+=0;
 		if (iMinute<0)
 		{
 			iMinute+=60;
@@ -319,6 +314,7 @@ public class Manager extends Application
 
 	/**Loads the next datapoint to the right.
 	 * @param Plot
+	 * @author Jeffrey Becker
 	 */
 	public void right(DataPlot Plot)
 	{
@@ -357,13 +353,13 @@ public class Manager extends Application
 	
 	
 	
-	/**Obtains the current date and time from the device running the program for use in the Manager class.
+	/**Obtains the current date and time from the device running the program for use by the Manager class.
 	 * @author Brandon Koury
 	 * 
 	 */
+	//Brandon Koury
 	public void getDate()
 	{
-		//Brandon Koury
 		dAndT = new Date( );
 		dayOfWeek = new SimpleDateFormat ("E");//acquire day
 		sDate = dayOfWeek.format(dAndT);//cast to string

@@ -31,7 +31,7 @@ public class DataManager extends TimerTask
 
 		try
 		{
-			File file=new File("Dummy.txt"); //Takes in the hard coded data from over a weeks analysis
+			File file=new File("RealS.txt"); //Takes in the hard coded data from over a weeks analysis
 			FileReader inputFile=new FileReader(file); //reads the data for the graph
 			BufferedReader in=new BufferedReader(inputFile);
 			line=in.readLine();//read line form file
@@ -65,7 +65,7 @@ public class DataManager extends TimerTask
 	{
 		int i;
 
-		BufferedWriter out=new BufferedWriter(new FileWriter("Dummy.txt"));//create new file
+		BufferedWriter out=new BufferedWriter(new FileWriter("RealS.txt"));//create new file
 
 		hist[ref]=update;
 
@@ -143,7 +143,6 @@ public class DataManager extends TimerTask
 			System.out.println(hist[ref]);
 			c++;
 			ref++;
-			ref+=0;
 			if (ref==672) ref=0;
 		}
 
@@ -210,7 +209,7 @@ public class DataManager extends TimerTask
 				last=iMinute;
 				System.out.println("Saved image:\t" + destination);
 
-				//				System.out.println(overwrite(hist, ref, highlight.main(destination)));
+				//				System.out.println(overwrite(hist, ref, highlightTest.main(destination)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}

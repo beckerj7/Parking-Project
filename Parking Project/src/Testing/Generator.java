@@ -18,12 +18,11 @@ public class Generator {
 		int n=max-min+1;
 		BufferedWriter out;
 
-		for (i=0; i<7; i++)
-		{
+
 			try 
 			{
-				out=new BufferedWriter(new FileWriter("Day" + i + " Dummy.txt"));
-				for (j=0; j<96; j++)
+				out=new BufferedWriter(new FileWriter("Dummy.txt"));
+				for (j=0; j<672; j++)
 				{
 					f=rn.nextInt()%n;
 					rand=min+(int)(Math.random()*max);
@@ -34,5 +33,4 @@ public class Generator {
 			}
 			catch (IOException e) {e.printStackTrace();}
 		}
-	}
 }
