@@ -39,12 +39,11 @@ public class Manager extends Application
 	
 	Scene scene;
 
-	int spots = highlight.availableSpts; //value grabbed from display class
-	int taken = highlight.takenSpts; //value grabbed from display class
 	int spotsA;
 	int d;//numerical day indicator
 	int iHour;//numerical hour indicator
 	int iMinute;//numerical minute indicator
+	int taken=0;
 	int[] hist;
 	Date dAndT;
 	String sDate;
@@ -129,6 +128,7 @@ public class Manager extends Application
 				imageLocation=dMan.imagePull();//download image to local storage
 				//				spotsA=highlightTest.main(imageLocation);
 				spotsA=0;
+				taken=23-spotsA;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 				taDisplay.setFont(Font.font ("Veranda", 30));
 				
