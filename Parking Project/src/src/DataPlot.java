@@ -7,7 +7,7 @@ import javafx.scene.chart.XYChart;
 
 
 //Jeffrey Becker
-public class DataPlot extends LineChart<String,Number>
+class DataPlot extends LineChart<String,Number>
 {
 	int[] hist=new int[672];
 

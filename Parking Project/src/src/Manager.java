@@ -81,7 +81,7 @@ public class Manager extends Application
 
 	public static void main(String args[])
 	{
-		Manager.launch(args);//activate GUI(?)
+		Manager.launch(args);//launch GUI(?)
 	}//end of main method
 
 
@@ -126,7 +126,7 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-				//				spotsA=highlightTest.main(imageLocation);
+				spotsA=AvailableSpotsEach.compare(imageLocation);
 				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
@@ -215,8 +215,8 @@ public class Manager extends Application
 		try
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
-			//				spotsA=highlightTest.main(imageLocation);
-			spotsA=0;
+			spotsA=AvailableSpotsEach.compare(imageLocation);
+//			spotsA=0;
 
 			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.setFont(Font.font ("Veranda", 30));
