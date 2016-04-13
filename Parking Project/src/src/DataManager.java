@@ -158,6 +158,8 @@ public class DataManager extends TimerTask
 
 
 	@Override
+	//Date and time
+	//authors: Brandon Koury & Jeffrey Becker
 	public void run()
 	{
 		int d=0;
