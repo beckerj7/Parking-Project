@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 /**
  * @author Jeffrey Becker
  * Launches and manages GUI and manages the call of the program's methods
+ * assistance from Brandon Koury with time and date elements
  */
 
 //Jeffrey Becker
