@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 
 //ERROR WITH CODE: will display available spots of image with the most available spots, EX image 1 has to be a full parking lot image
 
-public class AvailableSpotsEach {
+public class Compare {
 	public static int compare(String image) throws IOException {
 
 		BufferedImage img1 = ImageIO.read(new File("Empty.jpg")); // empty parking lot
@@ -302,7 +302,7 @@ public class AvailableSpotsEach {
 
 
 		//Available Spots       
-		availableSpts = 22 - takenSpts;
+		availableSpts = 23 - takenSpts;
 
 		//Display current time image (image 1)
 		JFrame frame = new JFrame();

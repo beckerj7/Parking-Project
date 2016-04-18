@@ -120,11 +120,8 @@ public class DataManager extends TimerTask
 			is.close();
 			os.close();
 		}//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
-		catch (IOException e1)//catch file I/O exceptions
-		{
-			System.out.println("Something went wrong with the file I/O!");//error message
-			e1.printStackTrace();
-		}
+		//Jeffrey Becker
+		catch (IOException e1) {e1.printStackTrace();}//catch file I/O exceptions
 
 		return destinationFile;//return image location
 	}//end of method ImagePull
@@ -135,8 +132,9 @@ public class DataManager extends TimerTask
 	{
 		int wait;
 		int c=1;
-		int ref=d*96+h*4+m/15+1;
 		int start=d*96+h*4+m/15;
+		int ref=start+1;
+		
 
 		while (hist[ref]==0&&ref!=start)
 		{
@@ -198,7 +196,7 @@ public class DataManager extends TimerTask
 		break;
 		default: System.out.println("Something went wrong with the date switch statement!");
 		}
-
+		
 		ref=d*96+iHour*4+iMinute/15;
 
 		if ((iMinute==0||iMinute==15||iMinute==30||iMinute==45)&&iMinute!=last)
@@ -209,7 +207,7 @@ public class DataManager extends TimerTask
 				last=iMinute;
 				System.out.println("Saved image:\t" + destination);
 
-				System.out.println(overwrite(hist, ref, AvailableSpotsEach.compare(destination)));
+				System.out.println(overwrite(hist, ref, Compare.compare(destination)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Timer;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -19,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 /**
@@ -38,6 +40,8 @@ public class Manager extends Application
 	StackPane bottom;
 	
 	Scene scene;
+	
+	Timer timer;
 
 	int spotsA;
 	int d;//numerical day indicator
@@ -45,6 +49,7 @@ public class Manager extends Application
 	int iMinute;//numerical minute indicator
 	int taken=0;
 	int[] hist;
+	boolean done=false;
 	Date dAndT;
 	String sDate;
 	String sHour;
@@ -89,6 +94,14 @@ public class Manager extends Application
 	@Override
 	public void start(Stage Stage)
 	{
+		//Dr. Jafer
+		Stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent t) {
+		       timer.cancel();
+		    }
+		});
+		
 		try
 		{
 			int i;
@@ -126,7 +139,7 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-				spotsA=AvailableSpotsEach.compare(imageLocation);
+//				spotsA=Compare.compare(imageLocation);
 				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
@@ -196,8 +209,9 @@ public class Manager extends Application
 		catch (Exception e) {e.printStackTrace();}
 
 		//begin autonomous image collection
-		Timer timer=new Timer();
+		timer=new Timer();
 		timer.scheduleAtFixedRate(dMan, 0, 1000);
+		if (done) timer.cancel();
 	}//end of method start
 
 
@@ -215,8 +229,8 @@ public class Manager extends Application
 		try
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
-			spotsA=AvailableSpotsEach.compare(imageLocation);
-//			spotsA=0;
+//			spotsA=Compare.compare(imageLocation);
+			spotsA=0;
 
 			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.setFont(Font.font ("Veranda", 30));
@@ -394,3 +408,6 @@ public class Manager extends Application
 		}
 	}
 }//end of class Manager
+
+
+
