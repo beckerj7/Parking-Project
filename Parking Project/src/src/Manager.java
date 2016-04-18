@@ -26,6 +26,7 @@ import javafx.stage.WindowEvent;
 /**
  * @author Jeffrey Becker
  * Launches and manages GUI and manages the call of the program's methods
+ * assistance from Brandon Koury with time and date elements
  */
 
 //Jeffrey Becker
@@ -69,17 +70,13 @@ public class Manager extends Application
 	Button btDayMinus;
 	Button btRefresh;
 	Button btAck;
-
+	
 	String imageLocation; //string for image location on disk
-
 	Image image; //creates image for imageView
 	ImageView imageView=new ImageView(image); //node to display image
-
 	TextArea taReport;//error reporting text area
 	TextArea taDisplay;//user data display text area
-
 	Text txtWait;
-	
 	DataPlot plot;
 
 	DataManager dMan=new DataManager();
@@ -195,11 +192,11 @@ public class Manager extends Application
 			borderPane.setLeft(left);//place text area in left pane
 
 			//button listeners
-			btRefresh.setOnAction(e->refresh());
-			btLeft.setOnAction(e->left(plot));
-			btRight.setOnAction(e->right(plot));
-			btDayPlus.setOnAction(e->next(plot));
-			btDayMinus.setOnAction(e->previous(plot));
+			btRefresh.setOnAction(e->refresh()); //refresh button for the GUI
+			btLeft.setOnAction(e->left(plot)); //left button allows the user to move left
+			btRight.setOnAction(e->right(plot)); //right button allows the user to move right
+			btDayPlus.setOnAction(e->next(plot)); //next button allows the user to move to the next day
+			btDayMinus.setOnAction(e->previous(plot)); //previous button allows the user to see the pervious day
 			btAck.setOnAction(e->acknowledge());
 
 			scene=new Scene(borderPane);//lights!
@@ -218,6 +215,7 @@ public class Manager extends Application
 
 	/**Replaces all GUI information with up-to-date values.
 	 * @author Jeffrey Becker
+	 * logic assisted with Brandon Koury
 	 */
 	public void refresh()//update to current camera image
 	{
