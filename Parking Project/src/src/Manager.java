@@ -136,8 +136,8 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-//				spotsA=Compare.compare(imageLocation);
-				spotsA=0;
+				spotsA=Compare.compare(imageLocation);
+//				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 				taDisplay.setFont(Font.font ("Veranda", 30));
