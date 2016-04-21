@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 public class Compare {
 	public static int compare(String image) throws IOException {
 
-		BufferedImage img1 = ImageIO.read(new File("Empty.jpg")); // empty parking lot
+		BufferedImage img1 = ImageIO.read(new File("empty_0800.jpg")); // empty parking lot
 		BufferedImage img2 = ImageIO.read(new File(image)); //current time parking lot
 		int width1 = img1.getWidth(); // Change - getWidth() and getHeight() for BufferedImage
 		int width2 = img2.getWidth(); // take no arguments
