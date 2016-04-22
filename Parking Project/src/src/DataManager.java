@@ -209,7 +209,7 @@ public class DataManager extends TimerTask
 				last=iMinute;
 				System.out.println("Saved image:\t" + destination);
 
-				System.out.println(overwrite(hist, ref, Compare.compare(destination)));
+//				System.out.println(overwrite(hist, ref, Compare.compare(destination)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}

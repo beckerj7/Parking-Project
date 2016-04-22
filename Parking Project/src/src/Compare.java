@@ -14,9 +14,10 @@ import javax.swing.JLabel;
 //ERROR WITH CODE: will display available spots of image with the most available spots, EX image 1 has to be a full parking lot image
 
 public class Compare {
-	public static int compare(String image) throws IOException {
 
-		BufferedImage img1 = ImageIO.read(new File("empty_0800.jpg")); // empty parking lot
+	public static int compare(String image, String empty) throws IOException {
+
+		BufferedImage img1 = ImageIO.read(new File(empty)); // empty parking lot
 		BufferedImage img2 = ImageIO.read(new File(image)); //current time parking lot
 		int width1 = img1.getWidth(); // Change - getWidth() and getHeight() for BufferedImage
 		int width2 = img2.getWidth(); // take no arguments
@@ -313,32 +314,39 @@ public class Compare {
 		frame.pack();
 		frame.setVisible(true);
 
-		System.out.println(count1);
-		System.out.println(count2);
-		System.out.println(count3);
-		System.out.println(count4);
-		System.out.println(count6);
-		System.out.println(count7);
-		System.out.println(count8);
-		System.out.println(count9);
-		System.out.println(count10);
-		System.out.println(count11);
-		System.out.println(count12);
-		System.out.println(count13);
-		System.out.println(count14);
-		System.out.println(count15);
-		System.out.println(count16);
-		System.out.println(count17);
-		System.out.println(count18);
-		System.out.println(count19);
-		System.out.println(count20);
-		System.out.println(count21);
-		System.out.println(count22);
-		System.out.println(count23);
+//		System.out.println(count1);
+//		System.out.println(count2);
+//		System.out.println(count3);
+//		System.out.println(count4);
+//		System.out.println(count6);
+//		System.out.println(count7);
+//		System.out.println(count8);
+//		System.out.println(count9);
+//		System.out.println(count10);
+//		System.out.println(count11);
+//		System.out.println(count12);
+//		System.out.println(count13);
+//		System.out.println(count14);
+//		System.out.println(count15);
+//		System.out.println(count16);
+//		System.out.println(count17);
+//		System.out.println(count18);
+//		System.out.println(count19);
+//		System.out.println(count20);
+//		System.out.println(count21);
+//		System.out.println(count22);
+//		System.out.println(count23);
 
 
 		System.out.println("Available Spots: " + availableSpts);
 		System.out.println("Taken Spots: " + takenSpts);
+		
 		return availableSpts;
+	}
+	
+	public int taken(int n)
+	{
+		int taken = 23 - n;
+		return taken;
 	}
 }

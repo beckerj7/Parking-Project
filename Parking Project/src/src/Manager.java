@@ -135,7 +135,7 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-				spotsA=Compare.compare(imageLocation);
+//				spotsA=Compare.compare(imageLocation);
 //				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
@@ -227,7 +227,7 @@ public class Manager extends Application
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
 //			spotsA=Compare.compare(imageLocation);
-			spotsA=0;
+//			spotsA=0;
 
 			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.setFont(Font.font ("Veranda", 30));
@@ -403,8 +403,5 @@ public class Manager extends Application
 		break;
 		default: System.out.println("Something went wrong with the date switch statement!");
 		}
-	}
+	}//end of method getDate
 }//end of class Manager
-
-
-
