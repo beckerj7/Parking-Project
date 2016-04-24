@@ -32,7 +32,7 @@ public class Tester {
 	@Test
 	public void test1() {
 		try {
-			assertEquals(1, Compare.compare("image159.jpg", "empty_0800.jpg"));
+			assertEquals(1, Compare.compare("image159.jpg", "empty_0800.jpg", false));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("Not yet implemented");
@@ -42,7 +42,7 @@ public class Tester {
 	@Test
 	public void test2() {
 		try {
-			assertEquals(0, Compare.compare("image197.jpg", "empty_1500.jpg"));
+			assertEquals(0, Compare.compare("image197.jpg", "empty_1500.jpg", false));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("Not yet implemented");
@@ -52,7 +52,7 @@ public class Tester {
 	@Test
 	public void test3() {
 		try {
-			assertEquals(23, Compare.compare("image1273.jpg", "empty_0200.jpg"));
+			assertEquals(23, Compare.compare("image1273.jpg", "empty_0200.jpg", false));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("Not yet implemented");
@@ -89,7 +89,7 @@ public class Tester {
 	@Test
 	public void test6() {
 		try {
-			assertFalse(23<Compare.compare(dMan.imagePull(), "empty_1500.jpg"));
+			assertFalse(23<Compare.compare(dMan.imagePull(), "empty_1500.jpg", false));
 		} catch (Exception e) {
 			fail("Not yet implemented");
 			e.printStackTrace();
@@ -99,7 +99,7 @@ public class Tester {
 	@Test
 	public void test7() {
 		try {
-			assertFalse(0>Compare.compare(dMan.imagePull(), "empty_1500.jpg"));
+			assertFalse(0>Compare.compare(dMan.imagePull(), "empty_1500.jpg", false));
 		} catch (Exception e) {
 			fail("Not yet implemented");
 			e.printStackTrace();
@@ -111,11 +111,10 @@ public class Tester {
 	public void test8() {
 		try {
 			Compare compare=new Compare();
-			assertEquals(22, compare.taken(Compare.compare("image159.jpg", "empty_0800.jpg")));
+			assertEquals(22, compare.taken(Compare.compare("image159.jpg", "empty_0800.jpg", false)));
 		} catch (Exception e) {
 			fail("Not yet implemented");
 			e.printStackTrace();
 		}
 	}
-	
 }

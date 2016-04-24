@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 public class Compare {
 
-	public static int compare(String image, String empty) throws IOException {
+	public static int compare(String image, String empty, boolean display) throws IOException {
 
 		BufferedImage img1 = ImageIO.read(new File(empty)); // empty parking lot
 		BufferedImage img2 = ImageIO.read(new File(image)); //current time parking lot
@@ -312,7 +312,7 @@ public class Compare {
 		frame.add(label);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		frame.setVisible(true);
+		frame.setVisible(display);
 
 //		System.out.println(count1);
 //		System.out.println(count2);
