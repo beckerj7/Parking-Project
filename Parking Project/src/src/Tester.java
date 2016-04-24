@@ -28,7 +28,7 @@ public class Tester {
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	//Author Jeffrey Becker
 	@Test
 	public void test1() {
 		try {
@@ -38,7 +38,7 @@ public class Tester {
 			fail("Not yet implemented");
 		}
 	}
-
+	//Author Jeffrey Becker
 	@Test
 	public void test2() {
 		try {
@@ -48,7 +48,7 @@ public class Tester {
 			fail("Not yet implemented");
 		}
 	}
-
+	//Author Brandon Koury
 	@Test
 	public void test3() {
 		try {
@@ -58,7 +58,7 @@ public class Tester {
 			fail("Not yet implemented");
 		}
 	}
-
+	//Author Brandon Koury
 	@Test
 	public void test4()
 	{
@@ -69,7 +69,7 @@ public class Tester {
 			e.printStackTrace();
 		}
 	}
-
+	//Author Kate Williams
 	@Test
 	public void test5()
 	{
@@ -85,7 +85,7 @@ public class Tester {
 		}
 	}
 	
-	
+	//Author Kate Williams
 	@Test
 	public void test6() {
 		try {
@@ -95,7 +95,7 @@ public class Tester {
 			e.printStackTrace();
 		}
 	}
-	
+	//Author Chad Woolford
 	@Test
 	public void test7() {
 		try {
@@ -106,7 +106,7 @@ public class Tester {
 		}
 	}
 	
-	
+	//Author Chad Woolford
 	@Test
 	public void test8() {
 		try {
