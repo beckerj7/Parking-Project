@@ -102,7 +102,7 @@ public class Manager extends Application
 		{
 			int i;
 
-			plot=new DataPlot("Time", "Spots Available");//instantiate DataPlot object
+			plot=new DataPlot("Time", "Spots Available");//instantiate DataPlotTest object
 
 			//GUI element creation
 			borderPane=new BorderPane();
@@ -135,7 +135,7 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-//				spotsA=Compare.compare(imageLocation);
+				spotsA=Compare.compare(imageLocation, "empty_1200.jpg", false);
 //				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
@@ -226,7 +226,7 @@ public class Manager extends Application
 		try
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
-//			spotsA=Compare.compare(imageLocation);
+			spotsA=Compare.compare(imageLocation, "empty_1200.jpg", false);
 //			spotsA=0;
 
 			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
@@ -364,7 +364,7 @@ public class Manager extends Application
 	
 	
 	
-	/**Obtains the current date and time from the device running the program for use by the Manager class.
+	/**Obtains the current date and time from the device running the program for use by the ManagerTest class.
 	 * @author Brandon Koury
 	 * 
 	 */
@@ -404,4 +404,4 @@ public class Manager extends Application
 		default: System.out.println("Something went wrong with the date switch statement!");
 		}
 	}//end of method getDate
-}//end of class Manager
+}//end of class ManagerTest

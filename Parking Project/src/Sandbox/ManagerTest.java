@@ -1,14 +1,11 @@
 package Sandbox;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -16,72 +13,114 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
+
+/**
+ * @author Jeffrey Becker
+ * Launches and manages GUI and manages the call of the program's methods
+ * assistance from Brandon Koury with time and date elements
+ */
+
+//Jeffrey Becker
 public class ManagerTest extends Application
 {	
 	//create GUI elements
-	BorderPane BorderPane;
-	Scene Scene;
+	BorderPane borderPane;
+	
+	Scene scene;
+	
+	Timer timer;
 
+	int spotsA;
 	int d;//numerical day indicator
-	int ref=0;
-	int spots = highlightTest.availableSpts; //value grabbed from display class
-	int taken = highlightTest.takenSpts; //value grabbed from display class
-	int iHour;
-	int iMinute;
-	Date DandT;
+	int iHour;//numerical hour indicator
+	int iMinute;//numerical minute indicator
+	int taken=0;
+	int[] hist;
+	boolean done=false;
+	Date dAndT;
 	String sDate;
 	String sHour;
 	String sMinute;
-	SimpleDateFormat DayOfWeek;
-	SimpleDateFormat Hour;
-	SimpleDateFormat Minute;
+	SimpleDateFormat dayOfWeek;
+	SimpleDateFormat hour;
+	SimpleDateFormat minute;
 
-	HBox HBoxBt;//HBox for buttons
-	HBox HBoxPics;//HBox for pictures
-	VBox VBoxGraph;//VBox for graph
-	VBox VBoxDisplay;//VBox for data display
+	HBox hbBt;//HBox for buttons
+	HBox hbPics;//HBox for pictures
+	VBox vbGraph;//VBox for graph
+	VBox vbTA;//VBox for data display
 
+	Button btLeft;
+	Button btRight;
+	Button btDayPlus;
+	Button btDayMinus;
+	Button btRefresh;
+	Button btAck;
+	Button btImage;
+	Button btPlot;
+	Button btMain;
+	
 	String imageLocation; //string for image location on disk
-
-	Image Image; //creates image for imageView
-	ImageView ImageView=new ImageView(Image); //node to display image
-
+	Image image; //creates image for imageView
+	ImageView imageView=new ImageView(image); //node to display image
 	TextArea taReport;//error reporting text area
 	TextArea taDisplay;//user data display text area
+	Text txtWait;
+	DataPlotTest plot;
+
+	DataManagerTest dMan=new DataManagerTest();
 
 	public static void main(String args[])
 	{
-		ManagerTest.launch(args);//activate GUI(?)
+		ManagerTest.launch(args);//launch GUI(?)
 	}//end of main method
 
 
-	/* (non-Javadoc)
-	 * @see javafx.application.Application#start(javafx.stage.Stage)
-	 */
+
 	@Override
 	public void start(Stage Stage)
 	{
+		//Dr. Jafer
+		Stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent t) {
+		       timer.cancel();
+		    }
+		});
+		
 		try
-		{//starts creating the graph being displayed to the user for the days of the week
+		{
 			int i;
 
-			DataPlotTest Plot=new DataPlotTest("Time", "Spots Available");
+			plot=new DataPlotTest("Time", "Spots Available");//instantiate DataPlotTest object
 
 			//GUI element creation
-			BorderPane=new BorderPane();
+			borderPane=new BorderPane();
+
 
 			//Buttons being used for shift through graphs and refreshing the GUI
-			Button btLeft=new Button("<---");
-			Button btRight=new Button("--->");
-			Button btRefresh=new Button("Refresh");
-
-			HBoxBt=new HBox();
-			HBoxPics=new HBox();
-			VBoxGraph=new VBox();
-			VBoxDisplay=new VBox();
+			btLeft=new Button("<");
+			btRight=new Button(">");
+			btDayMinus=new Button("<<");
+			btDayPlus=new Button(">>");
+			btRefresh=new Button("Refresh");
+			btAck=new Button("Got it!");
+			btImage=new Button("View Image");
+			btPlot=new Button("View prediction graph");
+			btMain=new Button("Return to main screen");
+			hbBt=new HBox();
+			hbPics=new HBox();
+			vbGraph=new VBox();
+			vbTA=new VBox();
+			vbTA=new VBox();
 
 			taDisplay=new TextArea();
 			taDisplay.setEditable(false);
@@ -89,56 +128,38 @@ public class ManagerTest extends Application
 			taReport=new TextArea();
 			taReport.setEditable(false);
 
-			ImageView.setFitWidth(800);//imageView formatting
-			ImageView.setPreserveRatio(true);
-
-			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+			imageView.setFitWidth(800);//imageView formatting
+			imageView.setPreserveRatio(true);
 
 			try
 			{
-				imageLocation=ImagePull();//download image to local storage
-				DandT = new Date( );
-				DayOfWeek = new SimpleDateFormat ("E");//acquire day
-				sDate = DayOfWeek.format(DandT);//cast to string
-				Hour = new SimpleDateFormat ("kk");//acquire hour
-				sHour = Hour.format(DandT);//cast to string
-				Minute = new SimpleDateFormat ("mm");//acquire minute
-				sMinute = Minute.format(DandT);//cast to string
-				iHour=Integer.parseInt(sHour);//cast to integer
-				iMinute=Integer.parseInt(sMinute);//cast to integer
+				imageLocation=dMan.imagePull();//download image to local storage
+				spotsA=CompareTest.compare(imageLocation, "empty_1200.jpg", false);
+//				spotsA=0;
+				taken=23-spotsA;
+				taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+				taDisplay.setFont(Font.font ("Veranda", 30));
+				
+				getDate();
+				
+				dMan.read();
 
-				if (iHour==24)//preserve arithmetic logic
+				if (spotsA==0)
 				{
-					iHour=0;
-					sHour=String.valueOf(iHour);
+					txtWait=new Text("Estimated time until\nnext spot is available:\n" + String.valueOf(dMan.predict(this, d, iHour, iMinute)) + " minutes.");
+					txtWait.setFont(Font.font ("Veranda", 40));
+					txtWait.setFill(Color.RED);
+					vbTA.getChildren().addAll(txtWait, btAck, taDisplay, btRefresh);
 				}
-				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
-
-				switch (sDate){//cast day to a representative number
-				case "Sun": d = 0;
-				break;
-				case "Mon": d = 1;
-				break;
-				case "Tue": d = 2;
-				break;
-				case "Wed": d = 3;
-				break;
-				case "Thu": d = 4;
-				break;
-				case "Fri": d = 5;
-				break;
-				case "Sat": d = 6;
-				break;
-				default: System.out.println("Something went wrong with the date switch statement!");
-				}
-
-				Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
-				VBoxGraph.getChildren().addAll(HBoxBt, Plot);
+				else vbTA.getChildren().addAll(taDisplay, btRefresh);
+				
+				hist=plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
+				vbGraph.getChildren().addAll(hbBt, plot);
 			}
-			catch (IOException IOE)// Catching errors that may occur with the file I/O
+			catch (IOException ioe)// Catching errors that may occur with the file I/O
 			{
 				System.out.println("Something is wrong with the file I/O!");
-				IOE.printStackTrace();
+				ioe.printStackTrace();
 			}
 			catch (Exception e)
 			{
@@ -146,102 +167,136 @@ public class ManagerTest extends Application
 				e.printStackTrace();
 			}
 
-			HBoxBt.getChildren().addAll(btLeft, btRight);//add buttons to HBox
-			VBoxDisplay.getChildren().addAll(taDisplay, btRefresh);//text area and refresh button to HBox
 
 			//GUI assembly
+			hbBt.getChildren().addAll(btDayMinus, btLeft, btRight, btDayPlus);//add buttons to HBox
+
 			try
 			{
-				ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
-				BorderPane.setCenter(ImageView);//place image in center pane
+				imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
+				borderPane.setCenter(imageView);//place image in center pane
 			}
-			catch (Exception E)
+			catch (Exception e)
 			{
 				for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
-				BorderPane.setCenter(taReport);//place image in center pane
+				borderPane.setCenter(taReport);//place image in center pane
 			}
 
-			BorderPane.setBottom(VBoxGraph);//place graph in bottom pane
-			BorderPane.setLeft(VBoxDisplay);//place text area in left pane
+			borderPane.setBottom(vbGraph);//place graph in bottom pane
+			borderPane.setCenter(vbTA);//place text area in left pane
 
-			btRefresh.setOnAction(e->Refresh());//refresh button listener
-			btLeft.setOnAction(e->Left(Plot));//cycle graph left button listener
-			btRight.setOnAction(e->Right(Plot));//cycle graph right button listener
+			//button listeners
+			btRefresh.setOnAction(e->refresh()); //refresh button for the GUI
+			btLeft.setOnAction(e->left(plot)); //left button allows the user to move left
+			btRight.setOnAction(e->right(plot)); //right button allows the user to move right
+			btDayPlus.setOnAction(e->next(plot)); //next button allows the user to move to the next day
+			btDayMinus.setOnAction(e->previous(plot)); //previous button allows the user to see the pervious day
+			btAck.setOnAction(e->acknowledge());
 
-			Scene=new Scene(BorderPane);//lights!
-			Stage.setScene(Scene);//camera!
+			scene=new Scene(borderPane);//lights!
+			Stage.setScene(scene);//camera!
 			Stage.show();//action!
 		}
-		catch (Exception E) {E.printStackTrace();}
+		catch (Exception e) {e.printStackTrace();}
+
+		//begin autonomous image collection
+		timer=new Timer();
+		timer.scheduleAtFixedRate(dMan, 0, 1000);
+		if (done) timer.cancel();
 	}//end of method start
 
 
 
-	public void Refresh()//update to current camera image
+	/**Replaces all GUI information with up-to-date values.
+	 * @author Jeffrey Becker
+	 * logic assisted with Brandon Koury
+	 */
+	public void refresh()//update to current camera image
 	{
 		int i;
+		
+		taDisplay.clear();
+		vbTA.getChildren().clear();
 
-		try 
+		try
 		{
-			imageLocation=ImagePull();//download image to local storage
-			Date DandT = new Date( );
-			SimpleDateFormat DayOfWeek = new SimpleDateFormat ("E");//acquire day
-			String sDate = DayOfWeek.format(DandT);//cast day to string
-			SimpleDateFormat Hour = new SimpleDateFormat ("kk");//acquire hour
-			String sHour = Hour.format(DandT);//cast hour to string
-			SimpleDateFormat Minute = new SimpleDateFormat ("mm");//acquire minute
-			String sMinute = Minute.format(DandT);//cast minute to string
-			taDisplay.clear();//clear the text area
-			taDisplay.setText("Number of parking spots available: " + spots + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
-			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//add date and time to text area
+			imageLocation=dMan.imagePull();//download image to local storage
+			spotsA=CompareTest.compare(imageLocation, "empty_1200.jpg", false);
+//			spotsA=0;
 
-			switch (sDate){//cast day to representative number
-			case "Sun": d = 0;
-			break;
-			case "Mon": d = 1;
-			break;
-			case "Tue": d = 2;
-			break;
-			case "Wed": d = 3;
-			break;
-			case "Thu": d = 4;
-			break;
-			case "Fri": d = 5;
-			break;
-			case "Sat": d = 6;
-			break;
+			taDisplay.setText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+			taDisplay.setFont(Font.font ("Veranda", 30));
+			
+			getDate();
+			
+			dMan.read();
+
+			if (spotsA==0)
+			{
+				txtWait=new Text("Estimated time until\nnext spot is available:\n" + String.valueOf(dMan.predict(this, d, iHour, iMinute)) + " minutes.");
+				txtWait.setFont(Font.font ("Veranda", 40));
+				txtWait.setFill(Color.RED);
+				vbTA.getChildren().addAll(txtWait, btAck, taDisplay, btRefresh);
 			}
+			else vbTA.getChildren().addAll(taDisplay, btRefresh);
 		}
-		catch (IOException IOE)
+		catch (IOException ioe) {ioe.printStackTrace();}// Catching errors that may occur with the file I/O
+		catch (Exception e) {e.printStackTrace();}
+		try
 		{
-			System.out.println("Something is wrong with the file I/O!");//error message
-			IOE.printStackTrace();
+			imageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
+			borderPane.setCenter(imageView);//place image in center pane
 		}
 		catch (Exception e)
 		{
-			System.out.println("Something is wrong with the image pull and I don`t know what!");//error message
-			e.printStackTrace();
-		}
-		try
-		{
-			ImageView=new ImageView(new Image(imageLocation)); //create image object in preparation to be loaded and displayed
-			BorderPane.setCenter(ImageView);//place image in center pane
-		}
-		catch (Exception E)
-		{
 			taReport.clear();
-			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");//error message
-			BorderPane.setCenter(taReport);//place image in center pane
+			for (i=0; i<9; i++) taReport.appendText("Failed to load image.\tFailed to load image.\tFailed to load image.\n");
+			borderPane.setCenter(taReport);//place image in center pane
 		}
-	}//end of method Refresh
+	}//end of method refresh
 
 
 
-	public void Left(DataPlotTest Plot)
+	/**Changes plot to the next day at the same time.
+	 * @param Plot
+	 * @author Jeffrey Becker
+	 */
+	public void next(DataPlotTest Plot)
 	{
-		ref--;
-		if (ref<0) ref=671;
+		d++;
+		if (d>6) d=0;
+		Plot=new DataPlotTest("Time", "Spots Available");
+		Plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
+		vbGraph.getChildren().clear();//clear VBox
+		vbGraph.getChildren().addAll(hbBt, Plot);//reload VBox
+	}//end of method next
+
+
+
+	/**Changes plot to the previous day at the same time.
+	 * @param Plot
+	 * @author Jeffrey Becker
+	 */
+	public void previous(DataPlotTest Plot)
+	{
+		d--;
+		if (d<0) d=6;
+		Plot=new DataPlotTest("Time", "Spots Available");
+		Plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
+
+		vbGraph.getChildren().clear();//clear VBox
+		vbGraph.getChildren().addAll(hbBt, Plot);//reload VBox
+	}//end of method previous
+
+
+
+	/**Loads the next datapoint to the left.
+	 * @param Plot
+	 * @author Jeffrey Becker
+	 */
+	public void left(DataPlotTest Plot)
+	{
 		iMinute-=15;
 		if (iMinute<0)
 		{
@@ -255,19 +310,20 @@ public class ManagerTest extends Application
 			}
 		}
 		Plot=new DataPlotTest("Time", "Spots Available");
-		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
-		VBoxGraph.getChildren().clear();//clear VBox
-		VBoxGraph.getChildren().addAll(HBoxBt, Plot);//reload VBox
-	}//end of method Left
+		vbGraph.getChildren().clear();//clear VBox
+		vbGraph.getChildren().addAll(hbBt, Plot);//reload VBox
+	}//end of method left
 
 
 
-	public void Right(DataPlotTest Plot)
+	/**Loads the next datapoint to the right.
+	 * @param Plot
+	 * @author Jeffrey Becker
+	 */
+	public void right(DataPlotTest Plot)
 	{
-		ref++;
-		if (ref>671) ref=0;
-
 		iMinute+=15;
 		if (iMinute>59)
 		{
@@ -282,54 +338,65 @@ public class ManagerTest extends Application
 		}
 
 		Plot=new DataPlotTest("Time", "Spots Available");
-		Plot.Plot(d, iHour, iMinute, this);//create test dataplot for GUI
+		Plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 
-		VBoxGraph.getChildren().clear();
-		VBoxGraph.getChildren().addAll(HBoxBt, Plot);
-	}//end of method Right
+		vbGraph.getChildren().clear();
+		vbGraph.getChildren().addAll(hbBt, Plot);
+	}//end of method right
 
 
-	public static String ImagePull() throws Exception
+
+	public void acknowledge()
 	{
-		int i=0;//counter variable
-		boolean check;//file existence variable
-
-		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg"; //url where image will be taken from
-
-		do//avoid overwriting existing images
-		{
-			i++;
-			check=new File("image" + i + ".jpg").exists();
-		}while (check==true);
-
-		String destinationFile="image" + i + ".jpg";//set image destination
-
 		try
 		{
-			/*****************************************************************/
-			/* Copyright 2013 Code Strategies                                */
-			/* This code may be freely used and distributed in any project.  */
-			/* However, please do not remove this credit if you publish this */
-			/* code in paper or electronic form, such as on a web site.      */
-			/*****************************************************************/
-			int length;
-			URL url=new URL(imageURL); //object for image url
-			InputStream is=url.openStream();
-			OutputStream os=new FileOutputStream(destinationFile); //object for image destination
-
-			byte[] b=new byte[2048];
-
-			while ((length=is.read(b))!=-1) os.write(b, 0, length);
-
-			is.close();
-			os.close();
-		}//Adapted from http://www.avajava.com/tutorials/lessons/how-do-i-save-an-image-from-a-url-to-a-file.html, by Deron Eriksson
-		catch (IOException e1)//catch file I/O exceptions
-		{
-			System.out.println("Something went wrong with the file I/O!");//error message
-			e1.printStackTrace();
+			vbTA.getChildren().clear();
+			vbTA.getChildren().addAll(taDisplay, btRefresh);
+			borderPane.setCenter(vbTA);
 		}
+		catch (Exception E) {E.printStackTrace();}
+	}
+	
+	
+	
+	/**Obtains the current date and time from the device running the program for use by the ManagerTest class.
+	 * @author Brandon Koury
+	 * 
+	 */
+	//Brandon Koury
+	public void getDate()
+	{
+		dAndT = new Date( );
+		dayOfWeek = new SimpleDateFormat ("E");//acquire day
+		sDate = dayOfWeek.format(dAndT);//cast to string
+		hour = new SimpleDateFormat ("kk");//acquire hour
+		sHour = hour.format(dAndT);//cast to string
+		minute = new SimpleDateFormat ("mm");//acquire minute
+		sMinute = minute.format(dAndT);//cast to string
+		iHour=Integer.parseInt(sHour);//cast to integer
+		iMinute=Integer.parseInt(sMinute);//cast to integer
 
-		return destinationFile;//return image location
-	}//end of method ImagePull
+		if (iHour==24) sHour=String.valueOf(iHour=0);//preserve arithmetic logic
+		
+		taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
+		
+		//cast day to a representative number
+		switch (sDate){
+		case "Sun": d = 0;
+		break;
+		case "Mon": d = 1;
+		break;
+		case "Tue": d = 2;
+		break;
+		case "Wed": d = 3;
+		break;
+		case "Thu": d = 4;
+		break;
+		case "Fri": d = 5;
+		break;
+		case "Sat": d = 6;
+		break;
+		default: System.out.println("Something went wrong with the date switch statement!");
+		}
+	}//end of method getDate
 }//end of class ManagerTest

@@ -18,7 +18,7 @@ class DataPlot extends LineChart<String,Number>
 		this.getYAxis().setLabel(PlotY);//label y-axis
 
 		setLegendVisible(false);
-	}//end of method DataPlot
+	}//end of method DataPlotTest
 
 
 
@@ -114,4 +114,4 @@ class DataPlot extends LineChart<String,Number>
 		
 		return hist;
 	}//end of method plot
-}//end of class DataPlot
+}//end of class DataPlotTest

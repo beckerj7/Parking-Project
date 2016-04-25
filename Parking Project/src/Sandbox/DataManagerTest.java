@@ -1,4 +1,4 @@
-package src;
+package Sandbox;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 
 //Jeffrey Becker
-public class DataManager extends TimerTask
+public class DataManagerTest extends TimerTask
 {
 	/**Reads the historical data file into a single array for ease of access.
 	 * @return An array containing the ordered historical data.
@@ -128,7 +128,7 @@ public class DataManager extends TimerTask
 
 
 
-	public int predict(Manager man, int d, int h, int m)
+	public int predict(ManagerTest man, int d, int h, int m)
 	{
 		int wait;
 		int c=1;
@@ -209,7 +209,7 @@ public class DataManager extends TimerTask
 				last=iMinute;
 				System.out.println("Saved image:\t" + destination);
 
-				System.out.println(overwrite(hist, ref, Compare.compare(destination, "empty_1200.jpg", false)));
+				System.out.println(overwrite(hist, ref, CompareTest.compare(destination, "empty_1200.jpg", false)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}
