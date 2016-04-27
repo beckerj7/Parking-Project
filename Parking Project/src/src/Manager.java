@@ -154,6 +154,7 @@ public class Manager extends Application
 				//				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.appendText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+				taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute + "\n");//display day and time
 				taDisplay.setFont(Font.font ("Veranda", 30));
 
 				dMan.read();
@@ -257,6 +258,7 @@ public class Manager extends Application
 			//			spotsA=0;
 
 			taDisplay.appendText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
+			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute + "\n");//display day and time
 			taDisplay.setFont(Font.font ("Veranda", 30));
 
 			dMan.read();
@@ -407,8 +409,6 @@ public class Manager extends Application
 		iMinute=Integer.parseInt(sMinute);//cast to integer
 
 		if (iHour==24) sHour=String.valueOf(iHour=0);//preserve arithmetic logic
-
-		taDisplay.appendText(sDate + " " + sHour + ":" + sMinute + "\n");//display day and time
 
 		//cast day to a representative number
 		switch (sDate){
