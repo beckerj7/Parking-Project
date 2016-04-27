@@ -254,9 +254,9 @@ public class Manager extends Application
 			if (1530<iHour*100+iMinute&&iHour*100+iMinute<=1630) empty="empty_1500.jpg";
 			if (1630<iHour*100+iMinute&&iHour*100+iMinute<=1730) empty="empty_1600.jpg";
 			if (1730<iHour*100+iMinute&&iHour*100+iMinute<=1830) empty="empty_1700.jpg";
-			spotsA=Compare.compare(imageLocation, empty, false);
+			spotsA=Compare.compare(imageLocation, empty, true);
 			//			spotsA=0;
-
+			taken=23-spotsA;
 			taDisplay.appendText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute + "\n");//display day and time
 			taDisplay.setFont(Font.font ("Veranda", 30));
