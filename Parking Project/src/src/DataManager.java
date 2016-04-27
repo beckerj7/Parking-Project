@@ -86,7 +86,6 @@ public class DataManager extends TimerTask
 	public String imagePull() throws Exception
 	{
 		int i=0;//counter variable
-		boolean check;//file existence variable
 
 		String imageURL="http://construction1.db.erau.edu/jpg/1/image.jpg";//url where image will be taken from
 
@@ -168,6 +167,7 @@ public class DataManager extends TimerTask
 		String sDate;
 		String sHour;
 		String sMinute;
+		String empty=null;
 		SimpleDateFormat dayOfWeek;
 		SimpleDateFormat hour;
 		SimpleDateFormat minute;
@@ -206,10 +206,23 @@ public class DataManager extends TimerTask
 			try
 			{
 				destination=imagePull();
+				if (iHour*100+iMinute<=530||1730<iHour*100+iMinute) empty="empty_0200.jpg";
+				if (630<iHour*100+iMinute&&iHour*100+iMinute<=730) empty="empty_0600.jpg";
+				if (730<iHour*100+iMinute&&iHour*100+iMinute<=830) empty="empty_0700.jpg";
+				if (830<iHour*100+iMinute&&iHour*100+iMinute<=930) empty="empty_0800.jpg";
+				if (930<iHour*100+iMinute&&iHour*100+iMinute<=1030) empty="empty_0900.jpg";
+				if (1030<iHour*100+iMinute&&iHour*100+iMinute<=1130) empty="empty_1000.jpg";
+				if (1130<iHour*100+iMinute&&iHour*100+iMinute<=1230) empty="empty_1100.jpg";
+				if (1230<iHour*100+iMinute&&iHour*100+iMinute<=1330) empty="empty_1200.jpg";
+				if (1330<iHour*100+iMinute&&iHour*100+iMinute<=1430) empty="empty_1300.jpg";
+				if (1430<iHour*100+iMinute&&iHour*100+iMinute<=1530) empty="empty_1400.jpg";
+				if (1530<iHour*100+iMinute&&iHour*100+iMinute<=1630) empty="empty_1500.jpg";
+				if (1630<iHour*100+iMinute&&iHour*100+iMinute<=1730) empty="empty_1600.jpg";
+				if (1730<iHour*100+iMinute&&iHour*100+iMinute<=1830) empty="empty_1700.jpg";
 				last=iMinute;
 				System.out.println("Saved image:\t" + destination);
 
-				System.out.println(overwrite(hist, ref, Compare.compare(destination, "empty_1200.jpg", false)));
+				System.out.println(overwrite(hist, ref, Compare.compare(destination, empty, false)));
 			}
 			catch (Exception e) {e.printStackTrace();}
 		}
