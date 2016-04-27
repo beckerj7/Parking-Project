@@ -38,9 +38,9 @@ public class Manager extends Application
 	StackPane center;
 	StackPane right;
 	StackPane bottom;
-	
+
 	Scene scene;
-	
+
 	Timer timer;
 
 	int spotsA;
@@ -54,6 +54,7 @@ public class Manager extends Application
 	String sDate;
 	String sHour;
 	String sMinute;
+	String empty;
 	SimpleDateFormat dayOfWeek;
 	SimpleDateFormat hour;
 	SimpleDateFormat minute;
@@ -69,7 +70,7 @@ public class Manager extends Application
 	Button btDayMinus;
 	Button btRefresh;
 	Button btAck;
-	
+
 	String imageLocation; //string for image location on disk
 	Image image; //creates image for imageView
 	ImageView imageView=new ImageView(image); //node to display image
@@ -92,12 +93,12 @@ public class Manager extends Application
 	{
 		//Dr. Jafer
 		Stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		    @Override
-		    public void handle(WindowEvent t) {
-		       timer.cancel();
-		    }
+			@Override
+			public void handle(WindowEvent t) {
+				timer.cancel();
+			}
 		});
-		
+
 		try
 		{
 			int i;
@@ -135,14 +136,26 @@ public class Manager extends Application
 			try
 			{
 				imageLocation=dMan.imagePull();//download image to local storage
-				spotsA=Compare.compare(imageLocation, "empty_1200.jpg", false);
-//				spotsA=0;
+				getDate();
+				if (iHour*100+iMinute<=530||1730<iHour*100+iMinute) empty="empty_0200.jpg";
+				if (630<iHour*100+iMinute&&iHour*100+iMinute<=730) empty="empty_0600.jpg";
+				if (730<iHour*100+iMinute&&iHour*100+iMinute<=830) empty="empty_0700.jpg";
+				if (830<iHour*100+iMinute&&iHour*100+iMinute<=930) empty="empty_0800.jpg";
+				if (930<iHour*100+iMinute&&iHour*100+iMinute<=1030) empty="empty_0900.jpg";
+				if (1030<iHour*100+iMinute&&iHour*100+iMinute<=1130) empty="empty_1000.jpg";
+				if (1130<iHour*100+iMinute&&iHour*100+iMinute<=1230) empty="empty_1100.jpg";
+				if (1230<iHour*100+iMinute&&iHour*100+iMinute<=1330) empty="empty_1200.jpg";
+				if (1330<iHour*100+iMinute&&iHour*100+iMinute<=1430) empty="empty_1300.jpg";
+				if (1430<iHour*100+iMinute&&iHour*100+iMinute<=1530) empty="empty_1400.jpg";
+				if (1530<iHour*100+iMinute&&iHour*100+iMinute<=1630) empty="empty_1500.jpg";
+				if (1630<iHour*100+iMinute&&iHour*100+iMinute<=1730) empty="empty_1600.jpg";
+				if (1730<iHour*100+iMinute&&iHour*100+iMinute<=1830) empty="empty_1700.jpg";
+				spotsA=Compare.compare(imageLocation, empty, false);
+				//				spotsA=0;
 				taken=23-spotsA;
 				taDisplay.appendText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 				taDisplay.setFont(Font.font ("Veranda", 30));
-				
-				getDate();
-				
+
 				dMan.read();
 
 				if (spotsA==0)
@@ -153,7 +166,7 @@ public class Manager extends Application
 					vbTA.getChildren().addAll(txtWait, btAck, taDisplay, btRefresh);
 				}
 				else vbTA.getChildren().addAll(taDisplay, btRefresh);
-				
+
 				hist=plot.plot(d, iHour, iMinute, this, dMan);//create test dataplot for GUI
 				vbGraph.getChildren().addAll(hbBt, plot);
 			}
@@ -169,7 +182,7 @@ public class Manager extends Application
 			}
 
 
-//			dMan.Overwrite(hist, 2, 999999000);
+			//			dMan.Overwrite(hist, 2, 999999000);
 
 
 			//GUI assembly
@@ -219,21 +232,33 @@ public class Manager extends Application
 	public void refresh()//update to current camera image
 	{
 		int i;
-		
+
 		taDisplay.clear();
 		vbTA.getChildren().clear();
 
 		try
 		{
 			imageLocation=dMan.imagePull();//download image to local storage
-			spotsA=Compare.compare(imageLocation, "empty_1200.jpg", false);
-//			spotsA=0;
+			getDate();
+			if (iHour*100+iMinute<=530||1730<iHour*100+iMinute) empty="empty_0200.jpg";
+			if (630<iHour*100+iMinute&&iHour*100+iMinute<=730) empty="empty_0600.jpg";
+			if (730<iHour*100+iMinute&&iHour*100+iMinute<=830) empty="empty_0700.jpg";
+			if (830<iHour*100+iMinute&&iHour*100+iMinute<=930) empty="empty_0800.jpg";
+			if (930<iHour*100+iMinute&&iHour*100+iMinute<=1030) empty="empty_0900.jpg";
+			if (1030<iHour*100+iMinute&&iHour*100+iMinute<=1130) empty="empty_1000.jpg";
+			if (1130<iHour*100+iMinute&&iHour*100+iMinute<=1230) empty="empty_1100.jpg";
+			if (1230<iHour*100+iMinute&&iHour*100+iMinute<=1330) empty="empty_1200.jpg";
+			if (1330<iHour*100+iMinute&&iHour*100+iMinute<=1430) empty="empty_1300.jpg";
+			if (1430<iHour*100+iMinute&&iHour*100+iMinute<=1530) empty="empty_1400.jpg";
+			if (1530<iHour*100+iMinute&&iHour*100+iMinute<=1630) empty="empty_1500.jpg";
+			if (1630<iHour*100+iMinute&&iHour*100+iMinute<=1730) empty="empty_1600.jpg";
+			if (1730<iHour*100+iMinute&&iHour*100+iMinute<=1830) empty="empty_1700.jpg";
+			spotsA=Compare.compare(imageLocation, empty, false);
+			//			spotsA=0;
 
 			taDisplay.appendText("Number of parking spots available: " + spotsA + "\nNumber of parking spots Taken: " + taken);//set text to be displayed
 			taDisplay.setFont(Font.font ("Veranda", 30));
-			
-			getDate();
-			
+
 			dMan.read();
 
 			if (spotsA==0)
@@ -361,9 +386,9 @@ public class Manager extends Application
 		}
 		catch (Exception E) {E.printStackTrace();}
 	}
-	
-	
-	
+
+
+
 	/**Obtains the current date and time from the device running the program for use by the ManagerTest class.
 	 * @author Brandon Koury
 	 * 
@@ -382,9 +407,9 @@ public class Manager extends Application
 		iMinute=Integer.parseInt(sMinute);//cast to integer
 
 		if (iHour==24) sHour=String.valueOf(iHour=0);//preserve arithmetic logic
-		
-		taDisplay.appendText("\n" + sDate + " " + sHour + ":" + sMinute);//display day and time
-		
+
+		taDisplay.appendText(sDate + " " + sHour + ":" + sMinute + "\n");//display day and time
+
 		//cast day to a representative number
 		switch (sDate){
 		case "Sun": d = 0;
